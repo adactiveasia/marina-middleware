@@ -1,0 +1,42 @@
+{
+  "name": "adsign-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoldenMaximo/nodejs-rest-api-basic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GoldenMaximo/nodejs-rest-api-basic/issues"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "homepage": "https://github.com/GoldenMaximo/nodejs-rest-api-basic#readme",
+  "dependencies": {
+    "@alirezazeynali/round-robin": "^1.0.1",
+    "@elastic/elasticsearch": "^7.9.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "firebase-admin": "^9.2.0",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.15",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.12",
+    "npm": "^7.5.2",
+    "roundround": "^0.2.0",
+    "uuid": "^8.3.0"
+  }
+}
