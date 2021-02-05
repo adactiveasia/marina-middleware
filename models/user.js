@@ -10,12 +10,6 @@ const User = mongoose.model(
     createdAt: Number,
     organizationId: Number,
     organizationName: String,
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role"
-      }
-    ]
   })
 );
 

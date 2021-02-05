@@ -6,11 +6,44 @@ const ROld = db.role;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+exports.signup = (req, res) => {
+    const user = new User({
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 8)
+    });
+
+    User.findOne({ email: req.body.email })
+        .exec((err, foundUser) => {
+            if (err) {
+                res.status(500).send({ message: err });
+                return
+            }
+
+            if (!foundUser) {
+                user.save((err, user) => {
+                    if (err) {
+                        res.status(500).send({ message: err });
+                        return;
+                    }
+                    res.send({ 
+                        error: 0,
+                        message: "User was registered successfully!" });
+                });
+            } else {
+                res.send({ 
+                    error: 1,
+                    message: "Email registered" 
+                });
+            }
+        })
+
+
+};
+
 exports.signin = (req, res) => {
     User.findOne({
-        username: req.body.username
+        email: req.body.email
     })
-        .populate("roles", "-_v")
         .exec((err, user) => {
             if (err) {
                 res.status(500).send({ message: err });
@@ -28,7 +61,7 @@ exports.signin = (req, res) => {
 
             if (!passwordIsValid) {
                 return res.status(401).send({
-                    accessToken: null,
+                    error: 1,
                     message: "Invalid Password!"
                 });
             }
@@ -39,14 +72,14 @@ exports.signin = (req, res) => {
 
             var authorities = [];
 
-            for (let i = 0; i < user.roles.length; i++) {
-                authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-            }
+            // for (let i = 0; i < user.roles.length; i++) {
+            //     authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+            // }
             res.status(200).send({
+                error:0,
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                roles: authorities,
                 accessToken: token
             });
         });
