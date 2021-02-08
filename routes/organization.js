@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const authController = require('../controllers/auth');
+const organizationController = require('../controllers/organization');
 
-router.post('/signup',  [
-    body('email').trim().isLength({ min: 5 }),
-    body('password').trim().isLength({ min: 8 }),
-], authController.signup);
+router.post('/create',  [
+    body('name').trim().isLength({ min: 5 }),
+    body('desc').trim().isLength({ min: 5 }),
+], organizationController.create);
 
 router.post('/signin',  [
     body('email').trim().isLength({ min: 5 }),
     body('password').trim().isLength({ min: 8 }),
-], authController.signin);
+], organizationController.signin);
 
 module.exports = router;

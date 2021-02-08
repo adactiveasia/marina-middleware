@@ -13,7 +13,10 @@ const User = mongoose.model(
       ref: "Organization",
     },
     organizationName: String,
+<<<<<<< HEAD
     access: Array,
+=======
+>>>>>>> 255642b7009ecc961249f811b55aa76ef8ce79e5
   })
 );
 

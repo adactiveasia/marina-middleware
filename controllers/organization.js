@@ -1,43 +1,37 @@
+
+const ObjectId = require('mongodb').ObjectId;
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const utils = require('../utils/utils');
 const config = require('../config/auth.config');
 const db = require('../models');
 const User = db.user;
-const ROld = db.role;
+const Organization = db.organization;
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+exports.create = async (req, res, next) => {
+    utils.authenticateJWT(req, res, next);
 
-exports.signup = (req, res) => {
-    const user = new User({
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+    let user = await User.findOne({
+        _id: ObjectId(req.user.id)
+    })
+
+    const organization = new Organization({
+        name: req.body.name,
+        desc: req.body.desc,
+        modifiedAt: new Date(),
+        modifiedBy: user.email,
     });
 
-    User.findOne({ email: req.body.email })
-        .exec((err, foundUser) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return
-            }
-
-            if (!foundUser) {
-                user.save((err, user) => {
-                    if (err) {
-                        res.status(500).send({ message: err });
-                        return;
-                    }
-                    res.send({ 
-                        error: 0,
-                        message: "User was registered successfully!" });
-                });
-            } else {
-                res.send({ 
-                    error: 1,
-                    message: "Email registered" 
-                });
-            }
-        })
-
-
+    organization.save((err, org) => {
+        if (err) {
+            res.status(500).send({ message: err });
+            return;
+        }
+        res.send({
+            error: 0,
+            message: "Organization was added successfully!"
+        });
+    });
 };
 
 exports.signin = (req, res) => {
@@ -76,10 +70,10 @@ exports.signin = (req, res) => {
             //     authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
             // }
             res.status(200).send({
-                error:0,
+                error: 0,
                 id: user._id,
-                username: user.username,
                 email: user.email,
+                name: user.name,
                 accessToken: token
             });
         });
