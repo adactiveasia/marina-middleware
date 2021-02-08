@@ -14,6 +14,8 @@ const User = mongoose.model(
       },
       organizationName: String,
       access: Array,
+      modifiedAt: Number,
+      modifiedBy: String,
     },
     {
       timestamps: true,
