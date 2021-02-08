@@ -8,14 +8,12 @@ const User = mongoose.model(
     password: String,
     name: String,
     createdAt: Number,
-    organizationId: Number,
+    organizationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization",
+    },
     organizationName: String,
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role"
-      }
-    ]
+    access: Array,
   })
 );
 
