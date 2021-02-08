@@ -64,15 +64,10 @@ app.use((req, res, next) => {
   next();
 });
 
-<<<<<<< HEAD
-app.use("/user", userRoutes);
-app.use("/auth", authRoutes);
-=======
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/site', siteRoutes);
 app.use('/org', organizationRoutes);
->>>>>>> 255642b7009ecc961249f811b55aa76ef8ce79e5
 
 app.use((error, req, res, next) => {
   console.log(error);
