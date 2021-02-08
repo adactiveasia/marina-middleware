@@ -8,15 +8,10 @@ const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const { Client } = require("@elastic/elasticsearch");
 
-<<<<<<< HEAD
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
-=======
-const userRoutes = require('./routes/user');
-const authRoutes = require('./routes/auth');
-const siteRoutes = require('./routes/site');
-const organizationRoutes = require('./routes/organization');
->>>>>>> 255642b7009ecc961249f811b55aa76ef8ce79e5
+const siteRoutes = require("./routes/site");
+const organizationRoutes = require("./routes/organization");
 
 const dbConfig = require("./config/db.config");
 
@@ -64,10 +59,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/user', userRoutes);
-app.use('/auth', authRoutes);
-app.use('/site', siteRoutes);
-app.use('/org', organizationRoutes);
+app.use("/user", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/site", siteRoutes);
+app.use("/org", organizationRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
