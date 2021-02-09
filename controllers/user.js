@@ -56,7 +56,7 @@ exports.listAllUsers = async (req, res, next) => {
   console.log(parseInt(req.query.perpage) * (parseInt(req.query.page) - 1));
 
   if (req.user) {
-    const users = await User.find(
+    User.find(
       {
         $and: [
           {
@@ -73,15 +73,20 @@ exports.listAllUsers = async (req, res, next) => {
         limit: parseInt(req.query.perpage),
         skip: parseInt(req.query.perpage) * (parseInt(req.query.page) - 1),
       }
-    ).sort({
-      [req.query.sort]: req.query.order,
-    });
-
-    return res.status(200).json({
-      error: 0,
-      message: "Fetch user successfully",
-      data: users,
-    });
+    )
+      .sort({
+        [req.query.sort]: req.query.order,
+      })
+      .then((users) => {
+        res.status(200).json({
+          error: 0,
+          message: "Fetch user successfully",
+          data: users,
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
   }
 };
 
@@ -103,22 +108,17 @@ exports.addUser = async (req, res, next) => {
     user.modifiedAt = new Date();
     user.modifiedBy = authUser ? authUser.email : null;
 
-    const saveUser = await user.save().catch((err) => {
-      return {
-        error: true,
-        message: err,
-      };
-    });
-
-    if (!saveUser.error) {
-      res.status(201).json({
-        error: 0,
-        message: "User was added successfully!",
+    user
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was added successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
       });
-    } else {
-      res.status(500).send({ message: saveUser.message });
-      return;
-    }
   }
 };
 
@@ -142,44 +142,32 @@ exports.editUser = async (req, res, next) => {
     user.modifiedAt = new Date();
     user.modifiedBy = authUser ? authUser.email : null;
 
-    const saveUser = await user.save().catch((err) => {
-      return {
-        error: true,
-        message: err,
-      };
-    });
-
-    if (!saveUser.error) {
-      res.status(201).json({
-        error: 0,
-        message: "User was added successfully!",
+    user
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was updated successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
       });
-    } else {
-      res.status(500).send({ message: saveUser.message });
-      return;
-    }
   }
 };
 
 exports.deleteUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    const deleteUser = await User.findByIdAndDelete(req.params.id).catch(
-      (err) => {
-        return {
-          error: true,
-          message: err,
-        };
-      }
-    );
-    if (!deleteUser.error) {
-      res.status(201).json({
-        error: 0,
-        message: "User was deleted successfully!",
+    User.findByIdAndDelete(req.params.id)
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was deleted successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
       });
-    } else {
-      res.status(500).send({ message: deleteUser.message });
-      return;
-    }
   }
 };
