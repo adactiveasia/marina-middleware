@@ -8,6 +8,7 @@ const User = mongoose.model(
       email: String,
       password: String,
       name: String,
+      isAdmin: Boolean,
       organizationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Organization",

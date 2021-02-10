@@ -53,7 +53,6 @@ exports.win = async (req, res, next) => {
 
 exports.listAllUsers = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  console.log(parseInt(req.query.perpage) * (parseInt(req.query.page) - 1));
 
   if (req.user) {
     User.find(
@@ -99,6 +98,7 @@ exports.addUser = async (req, res, next) => {
     const request = req.body;
     const user = new User();
     user.username = request.username;
+    user.isAdmin = request.isAdmin;
     user.email = request.email;
     user.password = bcrypt.hashSync(request.password);
     user.name = request.name;
@@ -136,6 +136,7 @@ exports.editUser = async (req, res, next) => {
       user.password = bcrypt.hashSync(request.password);
     }
     user.name = request.name;
+    user.isAdmin = request.isAdmin;
     user.organizationId = request.organizationId;
     user.organizationName = request.organizationName;
     user.access = request.access;
