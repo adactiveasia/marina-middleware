@@ -97,16 +97,18 @@ exports.addUser = async (req, res, next) => {
 
     const request = req.body;
     const user = new User();
-    user.username = request.username;
     user.isAdmin = request.isAdmin;
     user.email = request.email;
-    user.password = bcrypt.hashSync(request.password);
     user.name = request.name;
+    user.password = bcrypt.hashSync(Math.random().toString(36).substring(7));
     user.organizationId = request.organizationId;
     user.organizationName = request.organizationName;
     user.access = request.access;
-    user.modifiedAt = new Date();
     user.modifiedBy = authUser ? authUser.email : null;
+    user.createdBy = authUser ? authUser.email : null;
+    if (req.file) {
+      user.logoUrl = req.file.filename;
+    }
 
     user
       .save()
@@ -129,7 +131,7 @@ exports.editUser = async (req, res, next) => {
     const authUser = await User.findById(req.user.id);
 
     const request = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id);
+    const user = await User.findOneAndUpdate(req.params.id);
     user.username = request.username;
     user.email = request.email;
     if (request.password) {
@@ -142,6 +144,9 @@ exports.editUser = async (req, res, next) => {
     user.access = request.access;
     user.modifiedAt = new Date();
     user.modifiedBy = authUser ? authUser.email : null;
+    if (req.file) {
+      user.logoUrl = req.file.filename;
+    }
 
     user
       .save()
@@ -167,6 +172,22 @@ exports.deleteUser = async (req, res, next) => {
           message: "User was deleted successfully!",
         });
       })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.getUser = async = (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    User.findById(req.params.id)
+      .then((user) =>
+        res.status(200).json({
+          data: user,
+          error: 0,
+        })
+      )
       .catch((err) => {
         res.status(500).send({ message: err });
       });

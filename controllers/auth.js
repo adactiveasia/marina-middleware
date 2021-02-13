@@ -52,31 +52,43 @@ exports.signin = async (req, res) => {
       },
     });
   } else {
-    if (!bcrypt.compareSync(req.body.password, user.password)) {
+    if (user.password) {
+      if (!bcrypt.compareSync(req.body.password, user.password)) {
+        res.status(422).json({
+          errors: {
+            password: [
+              {
+                msg: "Invalid password",
+              },
+            ],
+          },
+        });
+      } else {
+        const token = jwt.sign({ id: user.id }, config.secret, {
+          expiresIn: 86400, // 24 hours
+        });
+
+        res.status(200).send({
+          error: 0,
+          id: user._id,
+          email: user.email,
+          name: user.name,
+          organizationId: user.organizationId,
+          organizationName: user.organizationName,
+          access: user.access,
+          accessToken: token,
+          isAdmin: user.isAdmin,
+        });
+      }
+    } else {
       res.status(422).json({
         errors: {
-          password: [
+          email: [
             {
-              msg: "Invalid password",
+              msg: "Your account is inactive",
             },
           ],
         },
-      });
-    } else {
-      const token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400, // 24 hours
-      });
-
-      res.status(200).send({
-        error: 0,
-        id: user._id,
-        email: user.email,
-        name: user.name,
-        organizationId: user.organizationId,
-        organizationName: user.organizationName,
-        access: user.access,
-        accessToken: token,
-        isAdmin: user.isAdmin,
       });
     }
   }

@@ -14,9 +14,10 @@ const User = mongoose.model(
         ref: "Organization",
       },
       organizationName: String,
+      logo: String,
       access: Array,
-      modifiedAt: Number,
       modifiedBy: String,
+      createdBy: String,
     },
     {
       timestamps: true,

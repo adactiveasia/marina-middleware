@@ -7,6 +7,23 @@ const db = require("../models");
 const User = db.user;
 const Organization = db.organization;
 
+exports.getAllOrganizations = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  Organization.find()
+    .then((organizations) => {
+      res.status(200).json({
+        error: 0,
+        message: "Fetch data organization success",
+        data: organizations,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: err,
+      });
+    });
+};
+
 exports.create = async (req, res, next) => {
   let user = await User.findOne({
     _id: ObjectId(req.user.id),
