@@ -4,19 +4,20 @@ const { body } = require('express-validator');
 const organizationController = require('../controllers/organization');
 
 router.get('/list',  [
-], organizationController.list);
+], organizationController.getAllOrganizations);
 
 router.post('/create',  [
     body('name').trim().isLength({ min: 5 }),
     body('desc').trim().isLength({ min: 5 }),
 ], organizationController.create);
 
-router.post('/edit',  [
+router.put('/edit',  [
+    body('id').trim().isLength({ min: 5 }),
     body('name').trim().isLength({ min: 5 }),
     body('desc').trim().isLength({ min: 8 }),
 ], organizationController.edit);
 
-router.post('/delete',  [
+router.delete('/delete',  [
     body('id').trim().isLength({ min: 5 }),
 ], organizationController.delete);
 

@@ -8,6 +8,56 @@ const db = require('../models');
 const User = db.user;
 const Organization = db.organization;
 
+exports.getAllOrganizations = async (req, res, next) => {
+    utils.authenticateJWT(req, res, next);
+    Organization.find()
+        .then((organizations) => {
+            res.status(200).json({
+                error: 0,
+                message: "Fetch data organization success",
+                data: organizations,
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                message: err,
+            });
+        });
+};
+
+exports.edit = async (req, res, next) => {
+    Organization
+        .findByIdAndUpdate(
+            req.body.id,
+            { $set: { name: req.body.name, desc: req.body.desc } },
+            { new: true },
+            (err, doc) => {
+                if (err) {
+                    res.status(500).send({ message: err });
+                    return;
+                }
+                res.send({
+                    error: 0,
+                    message: "Organization was edited successfully!"
+                });
+            });
+}
+
+exports.delete = async (req, res, next) => {
+    Organization.findByIdAndRemove(
+        req.body.id,
+        (err, doc) => {
+            if (err) {
+                res.status(500).send({ message: err });
+                return;
+            }
+            res.send({
+                error: 0,
+                message: "Organization was deleted successfully!"
+            });
+        });
+}
+
 exports.create = async (req, res, next) => {
     utils.authenticateJWT(req, res, next);
 
