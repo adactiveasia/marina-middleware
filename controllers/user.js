@@ -126,12 +126,12 @@ exports.addUser = async (req, res, next) => {
 
 exports.editUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-
+  console.log(req.params)
   if (req.user) {
     const authUser = await User.findById(req.user.id);
 
     const request = req.body;
-    const user = await User.findOneAndUpdate(req.params.id);
+    const user = await User.findByIdAndUpdate(req.params.id);
     user.username = request.username;
     user.email = request.email;
     if (request.password) {
@@ -142,7 +142,6 @@ exports.editUser = async (req, res, next) => {
     user.organizationId = request.organizationId;
     user.organizationName = request.organizationName;
     user.access = request.access;
-    user.modifiedAt = new Date();
     user.modifiedBy = authUser ? authUser.email : null;
     if (req.file) {
       user.logoUrl = req.file.filename;
