@@ -77,6 +77,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-    app.listen("5000", () => console.log("App ready"));
+    app.listen("5000", '127.0.0.1', () => console.log("App ready run on 127.0.0.1:5000"));
   })
   .catch((err) => console.log("ATLAS CONNECTION ERROR: ", err));
