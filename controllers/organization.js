@@ -25,15 +25,16 @@ exports.getAllOrganizations = async (req, res, next) => {
 };
 
 exports.create = async (req, res, next) => {
-  let user = await User.findOne({
-    _id: ObjectId(req.user.id),
-  });
+  utils.authenticateJWT(req, res, next);
+
+  if (req.user) {
+    const authUser = await User.findById(req.user.id);
 
   const organization = new Organization({
     name: req.body.name,
     desc: req.body.desc,
     modifiedAt: new Date(),
-    modifiedBy: user.email,
+    modifiedBy: authUser ? authUser.email : null
   });
 
   organization.save((err, org) => {
@@ -46,6 +47,7 @@ exports.create = async (req, res, next) => {
       message: "Organization was added successfully!",
     });
   });
+}
 };
 
 exports.signin = (req, res) => {

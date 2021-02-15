@@ -14,7 +14,7 @@ const User = mongoose.model(
         ref: "Organization",
       },
       organizationName: String,
-      logo: String,
+      logoUrl: String,
       access: Array,
       modifiedBy: String,
       createdBy: String,
