@@ -7,5 +7,7 @@ db.mongoose = mongoose;
 
 db.user = require("./user");
 db.organization = require("./organization");
+db.poi = require("./poi");
+db.poiCategory = require("./poiCategory");
 
 module.exports = db;

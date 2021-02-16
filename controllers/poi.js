@@ -4,17 +4,19 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const utils = require('../utils/utils');
 const config = require('../config/auth.config');
-const User = require("../models/user");
-const Poi = require("../models/poi");
+const db = require("../models");
+const User = db.user;
+const Poi = db.poi;
 
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  Organization.find()
-    .then((organizations) => {
+
+  Poi.find()
+    .then((poi) => {
       res.status(200).json({
         error: 0,
         message: "Fetch data poi success",
-        data: organizations,
+        data: poi,
       });
     })
     .catch((err) => {
@@ -31,7 +33,7 @@ exports.edit = async (req, res, next) => {
     _id: ObjectId(req.user.id)
   })
 
-  Organization
+  Poi
     .findByIdAndUpdate(
       req.body.id,
       {
@@ -67,7 +69,7 @@ exports.edit = async (req, res, next) => {
 }
 
 exports.delete = async (req, res, next) => {
-  Organization.findByIdAndRemove(
+  Poi.findByIdAndRemove(
     req.body.id,
     (err, doc) => {
       if (err) {
