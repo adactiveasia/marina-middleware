@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const utils = require('../utils/utils');
 const config = require('../config/auth.config');
-const db = require('../models');
 const User = require("../models/user");
 const PoiCategory = require("../models/poiCategory");
 
