@@ -1,76 +1,194 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 const admin = require("firebase-admin");
-const User = require('../models/user');
-const Mail = require('./mail');
-
+const User = require("../models/user");
+const Mail = require("./mail");
+const bcrypt = require("bcryptjs");
+const utils = require("../utils/utils");
 
 exports.win = async (req, res, next) => {
+  const { win, email, mobile, first, last, birthday, optin } = req.body;
+  try {
+    const mailTotal = await User.find({ email: email }).countDocuments();
+    const mobileTotal = await User.find({ mobile: mobile }).countDocuments();
+    if (mailTotal + mobileTotal < 5 && mailTotal < 4 && mobileTotal < 4) {
+      const user = new User({
+        email,
+        mobile,
+        first,
+        last,
+        birthday,
+        optin,
+      });
+      await user.save();
 
-    const { win, email, mobile, first, last, birthday, optin } = req.body;
-    try {
-        const mailTotal = await User.find({ email: email }).countDocuments();
-        const mobileTotal = await User.find({ mobile: mobile }).countDocuments();
-        if (mailTotal + mobileTotal < 5 && mailTotal < 4 && mobileTotal < 4) {
-            const user = new User({
-                email, mobile, first, last, birthday, optin
-            });
-            await user.save();
+      let info = "";
+      let error = "";
 
-            let info = '';
-            let error = '';
+      try {
+        info = Mail.sendMail(email, win);
+      } catch (e) {
+        error = e;
+      }
 
-            try {
-                info = Mail.sendMail(email, win)
-            } catch (e) {
-                error = e;
-            }
-
-
-
-            return res.status(200).json({
-                error: 0,
-                message: 'user saved successefully',
-                info: info,
-                mailError: error,
-            })
-        } else {
-            return res.status(200).json({
-                error: 1,
-                message: 'you have claim more than 3 times',
-            })
-        }
-
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statusCode = 500;
-        }
-        next(err);
-    };
-
+      return res.status(200).json({
+        error: 0,
+        message: "user saved successefully",
+        info: info,
+        mailError: error,
+      });
+    } else {
+      return res.status(200).json({
+        error: 1,
+        message: "you have claim more than 3 times",
+      });
+    }
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
 };
 
-async function deleteUser(uid) {
-    await admin.auth().deleteUsers([uid])
-        .then(() => {
-            console.log("success");
-        })
-        .catch(function (error) {
-            console.log('Error listing users:', error);
-        });
-}
+exports.listAllUsers = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
 
-async function listAllUsers() {
-    // List batch of users, 1000 at a time.
-    let users;
-    await admin.auth().listUsers(10)
-        .then(function (listUsersResult) {
-            users = listUsersResult.users.map((userRecord) => {
-                return userRecord.toJSON()
-            })
-        })
-        .catch(function (error) {
-            console.log('Error listing users:', error);
+  if (req.user) {
+    User.find(
+      {
+        $and: [
+          {
+            $or: [
+              { username: { $regex: `.*${req.query.keyword}.*` } },
+              { email: { $regex: `.*${req.query.keyword}.*` } },
+              { name: { $regex: `.*${req.query.keyword}.*` } },
+            ],
+          },
+        ],
+      },
+      {},
+      {
+        limit: parseInt(req.query.perpage),
+        skip: parseInt(req.query.perpage) * (parseInt(req.query.page) - 1),
+      }
+    )
+      .sort({
+        [req.query.sort]: req.query.order,
+      })
+      .then((users) => {
+        res.status(200).json({
+          error: 0,
+          message: "Fetch user successfully",
+          data: users,
         });
-    return users;
-}
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.addUser = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+
+  if (req.user) {
+    const authUser = await User.findById(req.user.id);
+
+    const request = req.body;
+    const user = new User();
+    user.isAdmin = request.isAdmin;
+    user.email = request.email;
+    user.name = request.name;
+    user.password = bcrypt.hashSync(Math.random().toString(36).substring(7));
+    user.organizationId = request.organizationId;
+    user.organizationName = request.organizationName;
+    user.access = request.access;
+    user.modifiedBy = authUser ? authUser.email : null;
+    user.createdBy = authUser ? authUser.email : null;
+    if (req.file) {
+      user.logoUrl = req.file.filename;
+    }
+
+    user
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was added successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.editUser = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  console.log(req.params)
+  if (req.user) {
+    const authUser = await User.findById(req.user.id);
+
+    const request = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id);
+    user.username = request.username;
+    user.email = request.email;
+    if (request.password) {
+      user.password = bcrypt.hashSync(request.password);
+    }
+    user.name = request.name;
+    user.isAdmin = request.isAdmin;
+    user.organizationId = request.organizationId;
+    user.organizationName = request.organizationName;
+    user.access = request.access;
+    user.modifiedBy = authUser ? authUser.email : null;
+    if (req.file) {
+      user.logoUrl = req.file.filename;
+    }
+
+    user
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was updated successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    User.findByIdAndDelete(req.params.id)
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was deleted successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.getUser = async = (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    User.findById(req.params.id)
+      .then((user) =>
+        res.status(200).json({
+          data: user,
+          error: 0,
+        })
+      )
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};

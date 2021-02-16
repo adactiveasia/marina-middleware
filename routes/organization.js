@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { body } = require('express-validator');
-const organizationController = require('../controllers/organization');
+const { body } = require("express-validator");
+const organizationController = require("../controllers/organization");
 
 router.get('/list',  [
 ], organizationController.getAllOrganizations);
