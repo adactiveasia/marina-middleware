@@ -10,6 +10,10 @@ const { Client } = require('@elastic/elasticsearch');;
 
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
+// const siteRoutes = require('./routes/site');
+const organizationRoutes = require('./routes/organization');
+const poiRoutes = require('./routes/poi');
+const poiCategoryRoutes = require('./routes/poiCategory');
 
 const dbConfig = require('./config/db.config');
 
@@ -53,6 +57,10 @@ app.use((req, res, next) => {
 
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
+// app.use('/site', siteRoutes);
+app.use('/org', organizationRoutes);
+app.use('/poi', poiRoutes);
+app.use('/poiCategory', poiCategoryRoutes);
 
 app.use((error, req, res, next) => {
     console.log(error);
@@ -60,6 +68,8 @@ app.use((error, req, res, next) => {
     const { message, data } = error;
     return res.status(statusCode).json({ message, data });
 });
+
+mongoose.set('useFindAndModify', false);
 
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
