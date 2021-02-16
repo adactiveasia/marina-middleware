@@ -108,7 +108,7 @@ exports.create = async (req, res, next) => {
     modifiedBy: user.email,
   });
 
-  Poi.save((err, org) => {
+  poi.save((err, org) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
