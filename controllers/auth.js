@@ -40,6 +40,19 @@ exports.signup = (req, res) => {
 
 };
 
+
+exports.changePassword = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+      const request = req.body;
+      const user = await User.findByIdAndUpdate(req.user.id);
+      if (request.password) {
+          user.password = bcrypt.hashSync(request.password);
+      }
+  }
+
+};
+
 exports.signin = (req, res) => {
     User.findOne({
         email: req.body.email
