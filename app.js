@@ -12,6 +12,7 @@ const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
 // const siteRoutes = require('./routes/site');
 const organizationRoutes = require('./routes/organization');
+const poiCategoryRoutes = require('./routes/poiCategory');
 
 const dbConfig = require('./config/db.config');
 
@@ -57,6 +58,7 @@ app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
 // app.use('/site', siteRoutes);
 app.use('/org', organizationRoutes);
+app.use('/poiCategory', poiCategoryRoutes);
 
 app.use((error, req, res, next) => {
     console.log(error);
