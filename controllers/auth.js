@@ -4,6 +4,7 @@ const User = db.user;
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const utils = require('../utils/utils');
 
 exports.signup = (req, res) => {
   const user = new User({
@@ -48,20 +49,20 @@ exports.changePassword = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(req.user.id);
     if (request.password) {
       user.password = bcrypt.hashSync(request.password);
+      user.isPasswordChanged = true;
     }
-  }
-
-  user
-    .save()
-    .then(() => {
-      res.status(201).json({
-        error: 0,
-        message: "password was changed successfully!",
+    user
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "password was changed successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
       });
-    })
-    .catch((err) => {
-      res.status(500).send({ message: err });
-    });
+  }
 
 };
 
