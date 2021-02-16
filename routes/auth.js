@@ -13,4 +13,8 @@ router.post('/signin',  [
     body('password').trim().isLength({ min: 8 }),
 ], authController.signin);
 
+router.put('/change',  [
+    body('password').trim().isLength({ min: 8 }),
+], authController.changePassword);
+
 module.exports = router;

@@ -1,7 +1,6 @@
 const config = require('../config/auth.config');
 const db = require('../models');
 const User = db.user;
-const ROld = db.role;
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -57,7 +56,7 @@ exports.changePassword = async (req, res, next) => {
     .then(() => {
       res.status(201).json({
         error: 0,
-        message: "password was added successfully!",
+        message: "password was changed successfully!",
       });
     })
     .catch((err) => {
