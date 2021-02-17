@@ -55,27 +55,7 @@ exports.listAllUsers = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
   if (req.user) {
-    User.find(
-      {
-        $and: [
-          {
-            $or: [
-              { username: { $regex: `.*${req.query.keyword}.*` } },
-              { email: { $regex: `.*${req.query.keyword}.*` } },
-              { name: { $regex: `.*${req.query.keyword}.*` } },
-            ],
-          },
-        ],
-      },
-      {},
-      {
-        limit: parseInt(req.query.perpage),
-        skip: parseInt(req.query.perpage) * (parseInt(req.query.page) - 1),
-      }
-    )
-      .sort({
-        [req.query.sort]: req.query.order,
-      })
+    User.find()
       .then((users) => {
         res.status(200).json({
           error: 0,
@@ -164,7 +144,7 @@ exports.editUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    User.findByIdAndDelete(req.params.id)
+    User.findByIdAndDelete(req.body.id)
       .then(() => {
         res.status(201).json({
           error: 0,
@@ -179,8 +159,9 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.getUser = async = (req, res, next) => {
   utils.authenticateJWT(req, res, next);
+
   if (req.user) {
-    User.findById(req.params.id)
+    User.findById(req.body.id)
       .then((user) =>
         res.status(200).json({
           data: user,

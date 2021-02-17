@@ -10,6 +10,7 @@ exports.signup = (req, res) => {
   const user = new User({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
+    isAdmin: req.body.isAdmin,
   });
 
   User.findOne({ email: req.body.email }).exec((err, foundUser) => {
@@ -41,23 +42,34 @@ exports.signup = (req, res) => {
 exports.changePassword = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    const request = req.body;
-    const user = await User.findByIdAndUpdate(req.user.id);
-    if (request.password) {
-      user.password = bcrypt.hashSync(request.password);
+    const body = req.body;
+    const user = await User.findById(req.user.id);
+    console.log(req.user.id)
+    console.log(user)
+    if (bcrypt.compareSync(body.oldPassword, user.password)) {
+      user.password = bcrypt.hashSync(body.newPassword);
       user.isPasswordChanged = true;
-    }
-    user
-      .save()
-      .then(() => {
-        res.status(201).json({
-          error: 0,
-          message: "password was changed successfully!",
-        });
-      })
-      .catch((err) => {
-        res.status(500).send({ message: err });
+    } else {
+      res.status(400).send({
+        error: 1,
+        message: 'wrong password entered'
       });
+    }
+
+    try {
+      user
+        .save()
+        .then(() => {
+          res.status(201).json({
+            error: 0,
+            message: "password was changed successfully!",
+          });
+        })
+    } catch {
+      (err) => {
+        res.status(500).send({ message: err });
+      }
+    };
   }
 };
 

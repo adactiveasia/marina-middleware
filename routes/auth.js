@@ -9,8 +9,8 @@ router.post(
   [
     body("email").trim().isLength({ min: 5 }).notEmpty(),
     body("password").trim().isLength({ min: 8 }).notEmpty(),
+    body('isAdmin'),
   ],
-  validate,
   authController.signup
 );
 
@@ -35,7 +35,8 @@ router.post(
 );
 
 router.put('/change',  [
-    body('password').trim().isLength({ min: 8 }),
+    body('oldPassword').trim().isLength({ min: 8 }),
+    body('newPassword').trim().isLength({ min: 8 }),
 ], authController.changePassword);
 
 module.exports = router;

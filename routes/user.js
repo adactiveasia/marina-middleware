@@ -22,7 +22,7 @@ router.post(
 );
 
 router.get("/", userController.listAllUsers);
-router.get("/:id", userController.getUser);
+router.post("/get", userController.getUser);
 router.post(
   "/",
   [
@@ -71,6 +71,6 @@ router.post(
   userController.editUser
 );
 
-router.delete("/:id", userController.deleteUser);
+router.delete("/delete", userController.deleteUser);
 
 module.exports = router;

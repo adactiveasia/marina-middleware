@@ -16,6 +16,7 @@ const User = mongoose.model(
       organizationName: String,
       logoUrl: String,
       access: Array,
+      isPasswordChanged: Boolean,
       modifiedBy: String,
       createdBy: String,
     },
