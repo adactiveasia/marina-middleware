@@ -24,7 +24,7 @@ router.post(
 router.get("/", userController.listAllUsers);
 router.post("/get", userController.getUser);
 router.post(
-  "/",
+  "/create",
   [
     body("email")
       .notEmpty()

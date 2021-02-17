@@ -7,13 +7,13 @@ const db = require("../models");
 const User = db.user;
 const Organization = db.organization;
 
-exports.getAllOrganizations = async (req, res, next) => {
+exports.getAll = async (req, res, next) => {
     utils.authenticateJWT(req, res, next);
     Organization.find()
         .then((organizations) => {
             res.status(200).json({
                 error: 0,
-                message: "Fetch data organization success",
+                message: "Fetch organization data success",
                 data: organizations,
             });
         })
@@ -23,6 +23,25 @@ exports.getAllOrganizations = async (req, res, next) => {
             });
         });
 };
+
+exports.get = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  Organization
+      .findById(req.body.id)
+      .then((organizations) => {
+          res.status(200).json({
+              error: 0,
+              message: "Fetch organization data success",
+              data: organizations,
+          });
+      })
+      .catch((err) => {
+          res.status(500).json({
+              message: err,
+          });
+      });
+};
+
 
 exports.edit = async (req, res, next) => {
     Organization
