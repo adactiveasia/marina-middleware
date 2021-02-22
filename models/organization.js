@@ -4,7 +4,7 @@ const Organization = mongoose.model(
   "Organization",
   new mongoose.Schema({
     name: String,
-    desc: String,
+    description: String,
     modifiedAt: Number,
     modifiedBy: String,
   })

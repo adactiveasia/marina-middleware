@@ -1,147 +1,93 @@
-const ObjectId = require("mongodb").ObjectId;
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const utils = require("../utils/utils");
-const config = require("../config/auth.config");
-const db = require("../models");
-const User = db.user;
-const Organization = db.organization;
+const Organization = require("../models/organization");
+const User = require("../models/user");
 
-exports.getAll = async (req, res, next) => {
-    utils.authenticateJWT(req, res, next);
-    Organization.find()
-        .then((organizations) => {
-            res.status(200).json({
-                error: 0,
-                message: "Fetch organization data success",
-                data: organizations,
-            });
-        })
-        .catch((err) => {
-            res.status(500).json({
-                message: err,
-            });
-        });
-};
-
-exports.get = async (req, res, next) => {
+exports.listAllOrganizations = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  Organization
-      .findById(req.body.id)
-      .then((organizations) => {
-          res.status(200).json({
-              error: 0,
-              message: "Fetch organization data success",
-              data: organizations,
-          });
-      })
-      .catch((err) => {
-          res.status(500).json({
-              message: err,
-          });
-      });
+  const organizations = await Organization.find();
+  res.status(200).send({
+    data: organizations,
+  });
 };
 
-
-exports.edit = async (req, res, next) => {
-    Organization
-        .findByIdAndUpdate(
-            req.body.id,
-            { $set: { name: req.body.name, desc: req.body.desc } },
-            { new: true },
-            (err, doc) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
-                res.send({
-                    error: 0,
-                    message: "Organization was edited successfully!"
-                });
-            });
-}
-
-exports.delete = async (req, res, next) => {
-    Organization.findByIdAndRemove(
-        req.body.id,
-        (err, doc) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return;
-            }
-            res.send({
-                error: 0,
-                message: "Organization was deleted successfully!"
-            });
-        });
-}
-
-exports.create = async (req, res, next) => {
+exports.addOrganization = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
   if (req.user) {
     const authUser = await User.findById(req.user.id);
 
-  const organization = new Organization({
-    name: req.body.name,
-    desc: req.body.desc,
-    modifiedAt: new Date(),
-    modifiedBy: authUser ? authUser.email : null
-  });
-
-  organization.save((err, org) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    res.send({
-      error: 0,
-      message: "Organization was added successfully!",
-    });
-  });
-}
+    const organization = new Organization();
+    organization.name = req.body.name;
+    organization.description = req.body.description;
+    organization.modifiedBy = authUser ? authUser.email : null;
+    organization.createdBy = authUser ? authUser.email : null;
+    organization
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was added successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
 };
 
-exports.signin = (req, res) => {
-  User.findOne({
-    email: req.body.email,
-  }).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-
-    if (!user) {
-      return res.status(404).send({ message: "User Not found." });
-    }
-
-    const passwordIsValid = bcrypt.compareSync(
-      req.body.password,
-      user.password
-    );
-
-    if (!passwordIsValid) {
-      return res.status(401).send({
-        error: 1,
-        message: "Invalid Password!",
+exports.editOrganization = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    const authUser = await User.findById(req.user.id);
+    const organization = await Organization.findById(req.params.id);
+    organization.name = req.body.name;
+    organization.description = req.body.description;
+    organization.modifiedBy = authUser ? authUser.email : null;
+    organization.createdBy = authUser ? authUser.email : null;
+    organization
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "User was added successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
       });
-    }
+  }
+};
 
-    const token = jwt.sign({ id: user.id }, config.secret, {
-      expiresIn: 86400, // 24 hours
-    });
+exports.getOrganization = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
 
-    var authorities = [];
+  if (req.user) {
+    Organization.findById(req.body.id)
+      .populate("Organization")
+      .then(async (user) => {
+        res.status(200).json({
+          data: user,
+          error: 0,
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
 
-    // for (let i = 0; i < user.roles.length; i++) {
-    //     authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-    // }
-    res.status(200).send({
-      error: 0,
-      id: user._id,
-      email: user.email,
-      name: user.name,
-      accessToken: token,
-    });
-  });
+exports.deleteOrganization = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    Organization.findByIdAndDelete(req.query.id)
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "Organization was deleted successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
 };

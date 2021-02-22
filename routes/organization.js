@@ -2,27 +2,24 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const organizationController = require("../controllers/organization");
+const validate = require("../utils/validator");
 
-router.get('/list', [
-], organizationController.getAll);
+router.get("/", organizationController.listAllOrganizations);
+router.post("/get", organizationController.getOrganization);
+router.post(
+  "/create",
+  [body("name").notEmpty().withMessage("This field is required")],
+  validate,
+  organizationController.addOrganization
+);
 
-router.post('/get', [
-    body('id').trim().isLength({ min: 5 }),
-], organizationController.get);
+router.post(
+  "/:id",
+  [body("name").notEmpty().withMessage("This field is required")],
+  validate,
+  organizationController.editOrganization
+);
 
-router.post('/create', [
-    body('name').trim().isLength({ min: 5 }),
-    body('desc').trim().isLength({ min: 5 }),
-], organizationController.create);
-
-router.put('/edit', [
-    body('id').trim().isLength({ min: 5 }),
-    body('name').trim().isLength({ min: 5 }),
-    body('desc').trim().isLength({ min: 8 }),
-], organizationController.edit);
-
-router.delete('/delete', [
-    body('id').trim().isLength({ min: 5 }),
-], organizationController.delete);
+router.delete("/delete", organizationController.deleteOrganization);
 
 module.exports = router;

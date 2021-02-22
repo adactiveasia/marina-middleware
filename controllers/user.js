@@ -2,10 +2,12 @@ const fs = require("fs");
 const path = require("path");
 const admin = require("firebase-admin");
 const User = require("../models/user");
+const Site = require("../models/site");
 const Organization = require("../models/organization");
 const Mail = require("./mail");
 const bcrypt = require("bcryptjs");
 const utils = require("../utils/utils");
+const { mongoose } = require("../models");
 
 exports.win = async (req, res, next) => {
   const { win, email, mobile, first, last, birthday, optin } = req.body;
@@ -112,7 +114,7 @@ exports.editUser = async (req, res, next) => {
     const authUser = await User.findById(req.user.id);
 
     const request = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id);
+    const user = await User.findByIdAndUpdate(request.id);
     user.username = request.username;
     user.email = request.email;
     if (request.password) {
@@ -145,7 +147,7 @@ exports.editUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    User.findByIdAndDelete(req.body.id)
+    User.findByIdAndDelete(req.query.id)
       .then(() => {
         res.status(201).json({
           error: 0,
@@ -160,16 +162,30 @@ exports.deleteUser = async (req, res, next) => {
 
 exports.getUser = async = (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-
   if (req.user) {
-    User.findById(req.body.id)
-      .populate("Organization")
+    User.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(req.body.id) } },
+      {
+        $lookup: {
+          from: "organizations",
+          localField: "organizationId",
+          foreignField: "_id",
+          as: "organization",
+        },
+      },
+      {
+        $lookup: {
+          from: "sites",
+          localField: "organizationId",
+          foreignField: "organizationId",
+          as: "sites",
+        },
+      },
+      { $unwind: "$organization" },
+    ])
       .then(async (user) => {
-        const organization = await Organization.findById(user.organizationId);
-
         res.status(200).json({
-          data: user,
-          organization: organization,
+          data: user[0],
           error: 0,
         });
       })

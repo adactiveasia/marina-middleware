@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/site", siteRoutes);
-app.use("/org", organizationRoutes);
+app.use("/organization", organizationRoutes);
 app.use("/poi", poiRoutes);
 app.use("/poiCategory", poiCategoryRoutes);
 

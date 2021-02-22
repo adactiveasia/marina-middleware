@@ -12,6 +12,7 @@ const validate = (req, res, next) => {
 
   return res.status(422).json({
     errors: groupError,
+    message: "Something went wrong!",
   });
 };
 
