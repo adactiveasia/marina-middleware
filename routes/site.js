@@ -1,15 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { body } = require('express-validator');
-const sitesController = require('../controllers/site');
+const { body } = require("express-validator");
+const sitesController = require("../controllers/site");
 
-router.post('/create',  [
-    body('name').trim().isLength({ min: 5 }),
-], sitesController.create);
+router.get("/", sitesController.listAllSites);
+router.post("/get", sitesController.getSite);
+router.post(
+  "/create",
+  [body("name").notEmpty().withMessage("This field is required")],
+  validate,
+  sitesController.addSite
+);
 
-router.post('/signin',  [
-    body('email').trim().isLength({ min: 5 }),
-    body('password').trim().isLength({ min: 8 }),
-], sitesController.signin);
+router.post(
+  "/:id",
+  [body("name").notEmpty().withMessage("This field is required")],
+  validate,
+  sitesController.editSite
+);
+
+router.delete("/delete", sitesController.deleteSite);
 
 module.exports = router;
