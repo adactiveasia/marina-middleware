@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const admin = require("firebase-admin");
 const User = require("../models/user");
+const Organization = require("../models/organization");
 const Mail = require("./mail");
 const bcrypt = require("bcryptjs");
 const utils = require("../utils/utils");
@@ -106,7 +107,7 @@ exports.addUser = async (req, res, next) => {
 
 exports.editUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  console.log(req.params)
+  console.log(req.params);
   if (req.user) {
     const authUser = await User.findById(req.user.id);
 
@@ -162,12 +163,16 @@ exports.getUser = async = (req, res, next) => {
 
   if (req.user) {
     User.findById(req.body.id)
-      .then((user) =>
+      .populate("Organization")
+      .then(async (user) => {
+        const organization = await Organization.findById(user.organizationId);
+
         res.status(200).json({
           data: user,
+          organization: organization,
           error: 0,
-        })
-      )
+        });
+      })
       .catch((err) => {
         res.status(500).send({ message: err });
       });
