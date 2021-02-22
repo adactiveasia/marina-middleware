@@ -10,7 +10,7 @@ const { Client } = require("@elastic/elasticsearch");
 
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
-// const siteRoutes = require('./routes/site');
+const siteRoutes = require("./routes/site");
 const organizationRoutes = require("./routes/organization");
 const poiRoutes = require("./routes/poi");
 const poiCategoryRoutes = require("./routes/poiCategory");
