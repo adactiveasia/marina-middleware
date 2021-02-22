@@ -83,7 +83,7 @@ exports.getSite = async (req, res, next) => {
 exports.deleteSite = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    Site.findByIdAndDelete(req.body.id)
+    Site.findByIdAndDelete(req.query.id)
       .then(() => {
         res.status(201).json({
           error: 0,
