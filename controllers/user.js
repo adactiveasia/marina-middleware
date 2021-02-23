@@ -194,3 +194,19 @@ exports.getUser = async = (req, res, next) => {
       });
   }
 };
+
+exports.access = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    User.findByIdAndUpdate(req.body._id, { access: req.body.access })
+      .then((user) => {
+        res.status(200).json({
+          data: user,
+          error: 0,
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};

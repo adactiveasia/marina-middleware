@@ -72,5 +72,6 @@ router.post(
 );
 
 router.delete("/delete", userController.deleteUser);
+router.post("/access", userController.access);
 
 module.exports = router;
