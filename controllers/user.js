@@ -83,7 +83,7 @@ exports.addUser = async (req, res, next) => {
     user.isAdmin = request.isAdmin;
     user.email = request.email;
     user.name = request.name;
-    user.password = bcrypt.hashSync(Math.random().toString(36).substring(7));
+    user.password = bcrypt.hashSync(request.password);
     user.organizationId = request.organizationId;
     user.organizationName = request.organizationName;
     user.access = request.access;
