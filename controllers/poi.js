@@ -1,9 +1,8 @@
-
-const ObjectId = require('mongodb').ObjectId;
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const utils = require('../utils/utils');
-const config = require('../config/auth.config');
+const ObjectId = require("mongodb").ObjectId;
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const utils = require("../utils/utils");
+const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Poi = db.poi;
@@ -30,47 +29,31 @@ exports.edit = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
   let user = await User.findOne({
-    _id: ObjectId(req.user.id)
-  })
+    _id: ObjectId(req.user.id),
+  });
 
-  Poi
-    .findByIdAndUpdate(
-      req.body.id,
-      {
-        $set: {
-          name: req.body.name,
-          desc: req.body.desc,
-          siteId: req.body.siteId,
-          category: req.body.category,
-          floor: req.body.floor,
-          location: req.body.location,
-          logo: req.body.logo,
-          logoUrl: req.body.logoUrl,
-          opentime: req.body.opentime,
-          phone: req.body.phone,
-          priority: req.body.priority,
-          tag: req.body.tag,
-          url: req.body.url,
-          modifiedAt: new Date(),
-          modifiedBy: user.email,
-        }
-      },
-      { new: true },
-      (err, doc) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-        res.send({
-          error: 0,
-          message: "Poi was edited successfully!"
-        });
-      });
-}
-
-exports.delete = async (req, res, next) => {
-  Poi.findByIdAndRemove(
+  Poi.findByIdAndUpdate(
     req.body.id,
+    {
+      $set: {
+        name: req.body.name,
+        desc: req.body.desc,
+        siteId: req.body.siteId,
+        category: req.body.category,
+        floor: req.body.floor,
+        location: req.body.location,
+        logo: req.body.logo,
+        logoUrl: req.body.logoUrl,
+        opentime: req.body.opentime,
+        phone: req.body.phone,
+        priority: req.body.priority,
+        tag: req.body.tag,
+        url: req.body.url,
+        modifiedAt: new Date(),
+        modifiedBy: user.email,
+      },
+    },
+    { new: true },
     (err, doc) => {
       if (err) {
         res.status(500).send({ message: err });
@@ -78,27 +61,40 @@ exports.delete = async (req, res, next) => {
       }
       res.send({
         error: 0,
-        message: "Poi was deleted successfully!"
+        message: "Poi was edited successfully!",
       });
+    }
+  );
+};
+
+exports.delete = async (req, res, next) => {
+  Poi.findByIdAndRemove(req.body.id, (err, doc) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    res.send({
+      error: 0,
+      message: "Poi was deleted successfully!",
     });
-}
+  });
+};
 
 exports.create = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
   let user = await User.findOne({
-    _id: ObjectId(req.user.id)
-  })
+    _id: ObjectId(req.user.id),
+  });
 
   const poi = new Poi({
     name: req.body.name,
     desc: req.body.desc,
     siteId: req.body.siteId,
-    category: req.body.category,
+    categoryId: req.body.categoryId,
+    categoryName: req.body.categoryName,
     floor: req.body.floor,
     location: req.body.location,
-    logo: req.body.logo,
-    logoUrl: req.body.logoUrl,
     opentime: req.body.opentime,
     phone: req.body.phone,
     priority: req.body.priority,
@@ -108,6 +104,10 @@ exports.create = async (req, res, next) => {
     modifiedBy: user.email,
   });
 
+  if (req.file) {
+    poi.logo = req.file.filename;
+  }
+
   poi.save((err, org) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -115,7 +115,7 @@ exports.create = async (req, res, next) => {
     }
     res.send({
       error: 0,
-      message: "Poi was added successfully!"
+      message: "Poi was added successfully!",
     });
   });
 };
