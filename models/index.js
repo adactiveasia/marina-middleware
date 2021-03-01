@@ -10,5 +10,6 @@ db.organization = require("./organization");
 db.poi = require("./poi");
 db.poiCategory = require("./poiCategory");
 db.category = require("./category");
+db.media = require("./media");
 
 module.exports = db;

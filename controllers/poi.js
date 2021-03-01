@@ -37,7 +37,8 @@ exports.edit = async (req, res, next) => {
   poi.name = req.body.name;
   poi.description = req.body.description;
   poi.siteId = req.body.siteId;
-  poi.category = req.body.category;
+  poi.categoryId = req.body.categoryId;
+  poi.categoryName = req.body.categoryName;
   poi.floor = req.body.floor;
   poi.location = req.body.location;
 

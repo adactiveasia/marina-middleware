@@ -16,6 +16,7 @@ const organizationRoutes = require("./routes/organization");
 const poiRoutes = require("./routes/poi");
 const poiCategoryRoutes = require("./routes/poiCategory");
 const categoryRoutes = require("./routes/category");
+const mediaRouter = require("./routes/media");
 
 const dbConfig = require("./config/db.config");
 
@@ -74,6 +75,7 @@ app.use("/organization", organizationRoutes);
 app.use("/poi", poiRoutes);
 app.use("/poiCategory", poiCategoryRoutes);
 app.use("/category", categoryRoutes);
+app.use("/media", mediaRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);
