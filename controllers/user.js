@@ -127,6 +127,12 @@ exports.editUser = async (req, res, next) => {
     user.access = request.access;
     user.modifiedBy = authUser ? authUser.email : null;
     if (req.file) {
+      if (user.logoUrl) {
+        if (fs.existsSync(`images/user/${user.logoUrl}`)) {
+          fs.unlinkSync(`images/user/${user.logoUrl}`);
+        }
+      }
+
       user.logoUrl = req.file.filename;
     }
 
@@ -147,6 +153,16 @@ exports.editUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
+    const user = await User.findById(req.query.id);
+
+    if (user) {
+      if (user.logo) {
+        if (fs.existsSync(`images/user/${user.logo}`)) {
+          fs.unlinkSync(`images/user/${user.logo}`);
+        }
+      }
+    }
+
     User.findByIdAndDelete(req.query.id)
       .then(() => {
         res.status(201).json({

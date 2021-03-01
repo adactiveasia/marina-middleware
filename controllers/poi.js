@@ -6,6 +6,7 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Poi = db.poi;
+const fs = require("fs");
 
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
@@ -32,43 +33,51 @@ exports.edit = async (req, res, next) => {
     _id: ObjectId(req.user.id),
   });
 
-  Poi.findByIdAndUpdate(
-    req.body.id,
-    {
-      $set: {
-        name: req.body.name,
-        desc: req.body.desc,
-        siteId: req.body.siteId,
-        category: req.body.category,
-        floor: req.body.floor,
-        location: req.body.location,
-        logo: req.body.logo,
-        logoUrl: req.body.logoUrl,
-        opentime: req.body.opentime,
-        phone: req.body.phone,
-        priority: req.body.priority,
-        tag: req.body.tag,
-        url: req.body.url,
-        modifiedAt: new Date(),
-        modifiedBy: user.email,
-      },
-    },
-    { new: true },
-    (err, doc) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
+  const poi = await Poi.findByIdAndUpdate(req.body.id);
+  poi.name = req.body.name;
+  poi.description = req.body.description;
+  poi.siteId = req.body.siteId;
+  poi.category = req.body.category;
+  poi.floor = req.body.floor;
+  poi.location = req.body.location;
+
+  if (req.file) {
+    if (poi.logo) {
+      if (fs.existsSync(`images/poi/${poi.logo}`)) {
+        fs.unlinkSync(`images/poi/${poi.logo}`);
       }
-      res.send({
-        error: 0,
-        message: "Poi was edited successfully!",
-      });
     }
-  );
+    poi.logo = req.file.filename;
+  }
+
+  poi.opentime = req.body.opentime;
+  poi.phone = req.body.phone;
+  poi.priority = req.body.priority;
+  poi.tag = req.body.tag;
+  poi.url = req.body.url;
+  poi.modifiedAt = new Date();
+  poi.modifiedBy = user.email;
+
+  poi.save().then(() => {
+    res.send({
+      error: 0,
+      message: "Poi was edited successfully!",
+    });
+  });
 };
 
 exports.delete = async (req, res, next) => {
-  Poi.findByIdAndRemove(req.body.id, (err, doc) => {
+  const poi = await Poi.findById(req.query.id);
+
+  if (poi) {
+    if (poi.logo) {
+      if (fs.existsSync(`images/poi/${poi.logo}`)) {
+        fs.unlinkSync(`images/poi/${poi.logo}`);
+      }
+    }
+  }
+
+  Poi.findByIdAndRemove(req.query.id, (err, doc) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -89,7 +98,7 @@ exports.create = async (req, res, next) => {
 
   const poi = new Poi({
     name: req.body.name,
-    desc: req.body.desc,
+    description: req.body.description,
     siteId: req.body.siteId,
     categoryId: req.body.categoryId,
     categoryName: req.body.categoryName,

@@ -7,6 +7,7 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 const { Client } = require("@elastic/elasticsearch");
+var fs = require("fs");
 
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
@@ -29,7 +30,11 @@ const app = express();
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    const path = req.body.path ? req.body.path : "";
+    if (!fs.existsSync("images/" + path)) {
+      fs.mkdirSync("images/" + path);
+    }
+    cb(null, `images/${path}`);
   },
   filename: (req, file, cb) => {
     cb(null, uuidv4() + "-" + file.originalname);
