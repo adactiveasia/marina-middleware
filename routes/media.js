@@ -13,7 +13,7 @@ router.post(
   mediaController.create
 );
 
-router.put(
+router.post(
   "/edit",
   [body("name").notEmpty().withMessage("This field is required")],
   validate,

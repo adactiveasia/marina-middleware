@@ -19,6 +19,8 @@ const Media = mongoose.model(
     duration: Number,
     logo: String,
     type: String,
+    start: Date,
+    end: Date,
     modifiedAt: Number,
     modifiedBy: String,
   })

@@ -44,6 +44,14 @@ exports.edit = async (req, res, next) => {
   media.duration = req.body.duration;
   media.type = req.body.type;
 
+  if (req.body.start) {
+    media.start = req.body.start;
+  }
+
+  if (req.body.end) {
+    media.end = req.body.end;
+  }
+
   if (req.file) {
     if (media.logo) {
       if (fs.existsSync(`images/media/${media.logo}`)) {
@@ -109,6 +117,14 @@ exports.create = async (req, res, next) => {
     modifiedBy: user.email,
   });
 
+  if (req.body.start) {
+    media.start = req.body.start;
+  }
+
+  if (req.body.end) {
+    media.end = req.body.end;
+  }
+
   if (req.file) {
     media.logo = req.file.filename;
   }
@@ -121,6 +137,7 @@ exports.create = async (req, res, next) => {
     res.send({
       error: 0,
       message: "Media was added successfully!",
+      data: media,
     });
   });
 };
