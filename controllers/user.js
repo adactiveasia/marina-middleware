@@ -181,7 +181,9 @@ exports.getUser = async = (req, res, next) => {
   if (req.user) {
     User.findById(req.body.id)
       .then((user) => {
-        res.json(user);
+        res.json({
+          data: user,
+        });
       })
       .catch((err) => {
         res.status(500).send({ message: err });
