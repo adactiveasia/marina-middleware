@@ -179,35 +179,42 @@ exports.deleteUser = async (req, res, next) => {
 exports.getUser = async = (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    User.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(req.body.id) } },
-      {
-        $lookup: {
-          from: "organizations",
-          localField: "organizationId",
-          foreignField: "_id",
-          as: "organization",
-        },
-      },
-      {
-        $lookup: {
-          from: "sites",
-          localField: "organizationId",
-          foreignField: "organizationId",
-          as: "sites",
-        },
-      },
-      { $unwind: "$organization" },
-    ])
-      .then(async (user) => {
-        res.status(200).json({
-          data: user[0],
-          error: 0,
-        });
+    User.findById(req.body.id)
+      .then((user) => {
+        res.json(user);
       })
       .catch((err) => {
         res.status(500).send({ message: err });
       });
+    //   User.aggregate([
+    //     { $match: { _id: mongoose.Types.ObjectId(req.body.id) } },
+    //     {
+    //       $lookup: {
+    //         from: "organizations",
+    //         localField: "organizationId",
+    //         foreignField: "_id",
+    //         as: "organization",
+    //       },
+    //     },
+    //     {
+    //       $lookup: {
+    //         from: "sites",
+    //         localField: "organizationId",
+    //         foreignField: "organizationId",
+    //         as: "sites",
+    //       },
+    //     },
+    //     { $unwind: "$organization" },
+    //   ])
+    //     .then(async (user) => {
+    //       res.status(200).json({
+    //         data: user[0],
+    //         error: 0,
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       res.status(500).send({ message: err });
+    //     });
   }
 };
 
