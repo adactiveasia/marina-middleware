@@ -176,13 +176,18 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-exports.getUser = async = (req, res, next) => {
+exports.getUser = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
+    const site = await Site.find();
+    const organization = await Organization.find();
+
     User.findById(req.body.id)
       .then((user) => {
         res.json({
           data: user,
+          site,
+          organization,
         });
       })
       .catch((err) => {
