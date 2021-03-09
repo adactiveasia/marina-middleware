@@ -142,6 +142,7 @@ exports.editUser = async (req, res, next) => {
         res.status(201).json({
           error: 0,
           message: "User was updated successfully!",
+          data: user,
         });
       })
       .catch((err) => {
