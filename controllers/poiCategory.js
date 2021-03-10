@@ -31,28 +31,23 @@ exports.edit = async (req, res, next) => {
     _id: ObjectId(req.user.id),
   });
 
-  PoiCategory.findByIdAndUpdate(
-    req.body.id,
-    {
-      $set: {
-        name: req.body.name,
-        description: req.body.description,
-        modifiedAt: new Date(),
-        modifiedBy: user.email,
-      },
-    },
-    { new: true },
-    (err, doc) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-      res.send({
-        error: 0,
-        message: "Poi Category was edited successfully!",
-      });
+  const poiCategory = await PoiCategory.findById(req.body.id);
+  poiCategory.name = req.body.name;
+  poiCategory.description = req.body.description;
+  poiCategory.siteId = req.body.siteId;
+  poiCategory.modifiedAt = new Date();
+  poiCategory.modifiedBy = user.email;
+
+  poiCategory.save((err, org) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
     }
-  );
+    res.send({
+      error: 0,
+      message: "Poi Category was added successfully!",
+    });
+  });
 };
 
 exports.delete = async (req, res, next) => {
