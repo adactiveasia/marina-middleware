@@ -1,12 +1,11 @@
 const fs = require("fs");
 const Map = require("../models/map");
 const utils = require("../utils/utils");
-const { mongoose } = require("../models");
 
 exports.listAllMaps = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
-  if (req.map) {
+  if (req.user) {
     Map.find()
       .then((maps) => {
         res.status(200).json({
@@ -24,8 +23,8 @@ exports.listAllMaps = async (req, res, next) => {
 exports.addMap = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
-  if (req.map) {
-    const authMap = await Map.findById(req.map.id);
+  if (req.user) {
+    const authMap = await Map.findById(req.user.id);
 
     const request = req.body;
     const map = new Map();
@@ -44,6 +43,7 @@ exports.addMap = async (req, res, next) => {
         res.status(201).json({
           error: 0,
           message: "Map was added successfully!",
+          data: map,
         });
       })
       .catch((err) => {
@@ -55,8 +55,8 @@ exports.addMap = async (req, res, next) => {
 exports.editMap = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   console.log(req.params);
-  if (req.map) {
-    const authMap = await Map.findById(req.map.id);
+  if (req.user) {
+    const authMap = await Map.findById(req.user.id);
 
     const request = req.body;
     const map = await Map.findByIdAndUpdate(request.id);
@@ -65,6 +65,7 @@ exports.editMap = async (req, res, next) => {
     map.userPos = request.userPos;
     map.siteId = request.siteId;
     map.modifiedBy = authMap ? authMap.email : null;
+    map.paths = request.paths;
     if (req.file) {
       if (map.fileUrl) {
         if (fs.existsSync(`images/map/${map.fileUrl}`)) {
@@ -92,7 +93,7 @@ exports.editMap = async (req, res, next) => {
 
 exports.deleteMap = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  if (req.map) {
+  if (req.user) {
     const map = await Map.findById(req.query.id);
 
     if (map) {
@@ -118,27 +119,11 @@ exports.deleteMap = async (req, res, next) => {
 
 exports.getMap = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  if (req.map) {
+  if (req.user) {
     Map.findById(req.query.id)
       .then((map) => {
         res.json({
           data: map,
-        });
-      })
-      .catch((err) => {
-        res.status(500).send({ message: err });
-      });
-  }
-};
-
-exports.access = async (req, res, next) => {
-  utils.authenticateJWT(req, res, next);
-  if (req.map) {
-    Map.findByIdAndUpdate(req.body._id, { access: req.body.access })
-      .then((map) => {
-        res.status(200).json({
-          data: map,
-          error: 0,
         });
       })
       .catch((err) => {

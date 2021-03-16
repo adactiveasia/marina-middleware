@@ -3,7 +3,7 @@ const router = express.Router();
 const mapController = require("../controllers/map");
 
 router.get("/", mapController.listAllMaps);
-router.post("/get", mapController.getMap);
+router.get("/get", mapController.getMap);
 router.post("/create", mapController.addMap);
 
 router.post("/edit", mapController.editMap);
