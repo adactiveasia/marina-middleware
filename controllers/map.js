@@ -54,18 +54,21 @@ exports.addMap = async (req, res, next) => {
 
 exports.editMap = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  console.log(req.params);
   if (req.user) {
     const authMap = await Map.findById(req.user.id);
 
     const request = req.body;
     const map = await Map.findByIdAndUpdate(request.id);
-    map.name = request.name;
-    map.description = request.description;
-    map.userPos = request.userPos;
-    map.siteId = request.siteId;
+
+    map.name = request.name ? request.name : map.name;
+    map.description = request.description
+      ? request.description
+      : map.description;
+    map.userPos = request.userPos ? request.userPos : map.userPos;
+    map.siteId = request.siteId ? request.siteId : map.siteId;
     map.modifiedBy = authMap ? authMap.email : null;
-    map.paths = request.paths;
+    map.paths = request.paths ? request.paths : map.paths;
+    map.userPos = request.userPos ? request.userPos : map.userPos;
     if (req.file) {
       if (map.fileUrl) {
         if (fs.existsSync(`images/map/${map.fileUrl}`)) {
