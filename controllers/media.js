@@ -155,3 +155,17 @@ exports.get = async (req, res, next) => {
       return;
     });
 };
+
+exports.calendar = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  Media.find({ siteId: req.query.siteId })
+    .then((media) => {
+      res.json({
+        data: media,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err });
+      return;
+    });
+};

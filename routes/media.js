@@ -27,5 +27,6 @@ router.delete(
 );
 
 router.get("/get", mediaController.get);
+router.get("/calendar", mediaController.calendar);
 
 module.exports = router;
