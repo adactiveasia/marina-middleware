@@ -10,20 +10,21 @@ const fs = require("fs");
 
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-
-  Poi.find()
-    .then((poi) => {
-      res.status(200).json({
-        error: 0,
-        message: "Fetch data poi success",
-        data: poi,
+  if (req.user) {
+    Poi.find()
+      .then((poi) => {
+        res.status(200).json({
+          error: 0,
+          message: "Fetch data poi success",
+          data: poi,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: err,
+        });
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err,
-      });
-    });
+  }
 };
 
 exports.edit = async (req, res, next) => {

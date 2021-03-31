@@ -11,19 +11,21 @@ const mongoose = require("mongoose");
 
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  Media.find({ siteId: req.query.siteId })
-    .then((media) => {
-      res.status(200).json({
-        error: 0,
-        message: "Fetch data media success",
-        data: media,
+  if (req.user) {
+    Media.find({ siteId: req.query.siteId })
+      .then((media) => {
+        res.status(200).json({
+          error: 0,
+          message: "Fetch data media success",
+          data: media,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: err,
+        });
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err,
-      });
-    });
+  }
 };
 
 exports.edit = async (req, res, next) => {

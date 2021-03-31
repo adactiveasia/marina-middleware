@@ -8,20 +8,21 @@ const PoiCategory = require("../models/poiCategory");
 
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-
-  PoiCategory.find()
-    .then((poiCategory) => {
-      res.status(200).json({
-        error: 0,
-        message: "Fetch data poi category success",
-        data: poiCategory,
+  if (req.user) {
+    PoiCategory.find()
+      .then((poiCategory) => {
+        res.status(200).json({
+          error: 0,
+          message: "Fetch data poi category success",
+          data: poiCategory,
+        });
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: err,
+        });
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err,
-      });
-    });
+  }
 };
 
 exports.edit = async (req, res, next) => {

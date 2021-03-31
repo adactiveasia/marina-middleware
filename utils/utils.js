@@ -13,6 +13,6 @@ exports.authenticateJWT = (req, res, next) => {
       return;
     });
   } else {
-    res.sendStatus(401);
+    return res.sendStatus(401);
   }
 };

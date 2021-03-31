@@ -4,10 +4,12 @@ const User = require("../models/user");
 
 exports.listAllSites = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  const sites = await Site.find();
-  res.status(200).send({
-    data: sites,
-  });
+  if (req.user) {
+    const sites = await Site.find();
+    res.status(200).send({
+      data: sites,
+    });
+  }
 };
 
 exports.addSite = async (req, res, next) => {

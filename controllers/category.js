@@ -4,10 +4,12 @@ const User = require("../models/user");
 
 exports.listAllCategories = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
-  const categories = await Category.find();
-  res.status(200).send({
-    data: categories,
-  });
+  if (req.user) {
+    const categories = await Category.find();
+    res.status(200).send({
+      data: categories,
+    });
+  }
 };
 
 exports.addCategory = async (req, res, next) => {
