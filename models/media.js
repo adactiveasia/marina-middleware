@@ -18,6 +18,8 @@ const Media = mongoose.model(
     dates: Array,
     duration: Number,
     logo: String,
+    fileType: String,
+    color: String,
     type: String,
     start: Date,
     end: Date,

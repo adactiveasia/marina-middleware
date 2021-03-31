@@ -45,6 +45,7 @@ exports.edit = async (req, res, next) => {
   media.dates = JSON.parse(req.body.dates);
   media.duration = req.body.duration;
   media.type = req.body.type;
+  media.color = req.body.color;
 
   if (req.body.start) {
     media.start = req.body.start;
@@ -61,6 +62,7 @@ exports.edit = async (req, res, next) => {
       }
     }
     media.logo = req.file.filename;
+    media.fileType = req.file.mimetype;
   }
 
   media.modifiedAt = new Date();
@@ -115,6 +117,7 @@ exports.create = async (req, res, next) => {
     dates: JSON.parse(req.body.dates),
     duration: req.body.duration,
     type: req.body.type,
+    color: req.body.color,
     modifiedAt: new Date(),
     modifiedBy: user.email,
   });
@@ -129,6 +132,7 @@ exports.create = async (req, res, next) => {
 
   if (req.file) {
     media.logo = req.file.filename;
+    media.fileType = req.file.mimetype;
   }
 
   media.save((err, org) => {
