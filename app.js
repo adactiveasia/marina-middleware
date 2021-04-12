@@ -18,6 +18,7 @@ const poiCategoryRoutes = require("./routes/poiCategory");
 const categoryRoutes = require("./routes/category");
 const mediaRouter = require("./routes/media");
 const mapRouter = require("./routes/map");
+const feedbackRouter = require("./routes/feedback");
 
 const dbConfig = require("./config/db.config");
 
@@ -79,6 +80,7 @@ app.use("/poiCategory", poiCategoryRoutes);
 app.use("/category", categoryRoutes);
 app.use("/media", mediaRouter);
 app.use("/map", mapRouter);
+app.use("/feedback", feedbackRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);
