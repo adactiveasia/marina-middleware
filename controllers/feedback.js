@@ -31,8 +31,6 @@ exports.getAll = async (req, res, next) => {
 exports.edit = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
-  console.log(req.body);
-
   let user = await User.findOne({
     _id: ObjectId(req.user.id),
   });

@@ -19,6 +19,7 @@ const categoryRoutes = require("./routes/category");
 const mediaRouter = require("./routes/media");
 const mapRouter = require("./routes/map");
 const feedbackRouter = require("./routes/feedback");
+const respondentRouter = require("./routes/respondent");
 
 const dbConfig = require("./config/db.config");
 
@@ -81,6 +82,7 @@ app.use("/category", categoryRoutes);
 app.use("/media", mediaRouter);
 app.use("/map", mapRouter);
 app.use("/feedback", feedbackRouter);
+app.use("/respondent", respondentRouter);
 
 app.use((error, req, res, next) => {
   console.log(error);

@@ -12,5 +12,6 @@ db.poiCategory = require("./poiCategory");
 db.category = require("./category");
 db.media = require("./media");
 db.feedback = require("./feedback");
+db.respondent = require("./respondent");
 
 module.exports = db;
