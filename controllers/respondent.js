@@ -3,24 +3,32 @@ const Respondent = db.respondent;
 const utils = require("../utils/utils");
 const _ = require("underscore");
 const moment = require("moment");
+const Feedback = require("../models/feedback");
 
 exports.create = async (req, res, next) => {
-  const respondent = new Respondent({
-    feedbackId: req.body.feedbackId,
-    star: req.body.star,
-  });
-
-  respondent.save((err, org) => {
-    if (err) {
-      res.status(500).send({ message: err, data: respondent });
-      return;
-    }
-    res.send({
-      error: 0,
-      message: "Respondent was added successfully!",
-      data: respondent,
+  const checkFirst = await Feedback.findById(req.body.feedbackId);
+  if (!checkFirst.start || !checkFirst.end) {
+    res.status(400).json({
+      message: "Cannot send feedback because the date is not setted!",
     });
-  });
+  } else {
+    const respondent = new Respondent({
+      feedbackId: req.body.feedbackId,
+      star: req.body.star,
+    });
+
+    respondent.save((err, org) => {
+      if (err) {
+        res.status(500).send({ message: err, data: respondent });
+        return;
+      }
+      res.send({
+        error: 0,
+        message: "Respondent was added successfully!",
+        data: respondent,
+      });
+    });
+  }
 };
 
 exports.get = async (req, res, next) => {
