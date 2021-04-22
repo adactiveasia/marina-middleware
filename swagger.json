@@ -9,8 +9,8 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "http://13.229.130.192/",
-  "basePath": "/api/",
+  "host": "http://13.229.130.192/api",
+  "basePath": "/",
   "tags": [
     {
       "name": "Auth",
