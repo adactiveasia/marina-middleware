@@ -44,7 +44,7 @@ exports.edit = async (req, res, next) => {
   feedback.modifiedBy = user.email;
 
   feedback.save().then(() => {
-    res.send({
+    res.status(201).send({
       error: 0,
       message: "Feedback was edited successfully!",
       data: req.body,
@@ -81,7 +81,7 @@ exports.create = async (req, res, next) => {
       modifiedBy: user.email,
     });
 
-    feedback.save((err, org) => {
+    feedback.status(201).save((err, org) => {
       if (err) {
         res.status(500).send({ message: err, data: feedback });
         return;

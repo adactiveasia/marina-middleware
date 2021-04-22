@@ -69,7 +69,7 @@ exports.edit = async (req, res, next) => {
   media.modifiedBy = user.email;
 
   media.save().then(() => {
-    res.send({
+    res.status(201).send({
       error: 0,
       message: "Media was edited successfully!",
       data: media,
@@ -140,7 +140,7 @@ exports.create = async (req, res, next) => {
       res.status(500).send({ message: err, data: media });
       return;
     }
-    res.send({
+    res.status(201).send({
       error: 0,
       message: "Media was added successfully!",
       data: media,

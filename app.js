@@ -20,6 +20,8 @@ const mediaRouter = require("./routes/media");
 const mapRouter = require("./routes/map");
 const feedbackRouter = require("./routes/feedback");
 const respondentRouter = require("./routes/respondent");
+const swaggerUi = require("swagger-ui-express"),
+  swaggerDocument = require("./swagger.json");
 
 const dbConfig = require("./config/db.config");
 
@@ -31,6 +33,14 @@ const client = new Client({
 const MONGODB_URI = `mongodb://localhost:27017/adsign`;
 
 const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -58,8 +68,6 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-app.use(cors());
-app.use(bodyParser.json());
 app.use(multer({ storage: fileStorage, fileFilter }).single("file"));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
@@ -83,6 +91,7 @@ app.use("/media", mediaRouter);
 app.use("/map", mapRouter);
 app.use("/feedback", feedbackRouter);
 app.use("/respondent", respondentRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((error, req, res, next) => {
   console.log(error);

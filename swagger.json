@@ -1,0 +1,607 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Adsign API",
+    "description": "Adsign API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "API for Authentication"
+    },
+    {
+      "name": "Media",
+      "description": "Media API"
+    },
+    {
+      "name": "Feedback",
+      "description": "Feedback API"
+    },
+    {
+      "name": "Respondent",
+      "description": "Respondent API"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+
+  "paths": {
+    "/auth/signin": {
+      "post": {
+        "tags": ["Auth"],
+        "description": "Login to system",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "body",
+            "description": "Login",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Login success",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            },
+            "example": {
+              "errors": {
+                "password": [
+                  {
+                    "msg": "Invalid password"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/media/list": {
+      "get": {
+        "tags": ["Media"],
+        "description": "List all media",
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Site ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Media fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/media/create": {
+      "post": {
+        "tags": ["Media"],
+        "description": "Create Media",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "Media Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "media"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "Media Name"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "description": "description media"
+          },
+          {
+            "name": "siteId",
+            "type": "string",
+            "in": "formData",
+            "description": "site Id"
+          },
+          {
+            "name": "categoryId",
+            "type": "string",
+            "in": "formData",
+            "description": "category Id"
+          },
+          {
+            "name": "categoryName",
+            "type": "string",
+            "in": "formData",
+            "description": "category name"
+          },
+          {
+            "name": "days",
+            "type": "string",
+            "in": "formData",
+            "description": "days formatted as json array but in string",
+            "default": "[]"
+          },
+          {
+            "name": "dates",
+            "type": "string",
+            "in": "formData",
+            "description": "dates formatted as json array but in string",
+            "default": "[]"
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "description": "duration in second",
+            "in": "formData"
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "description": "color for calendar event with hexadecimal",
+            "in": "formData"
+          },
+          {
+            "name": "type",
+            "type": "enum",
+            "description": "media type date|day|all",
+            "in": "formData"
+          },
+          {
+            "name": "start",
+            "type": "date",
+            "description": "Start date media yyyy-mm-dd",
+            "in": "formData"
+          },
+          {
+            "name": "end",
+            "type": "date",
+            "description": "End date media yyyy-mm-dd",
+            "in": "formData"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Media saved successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/media/get": {
+      "get": {
+        "tags": ["Media"],
+        "description": "get media by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Media ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Media get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/media/edit": {
+      "post": {
+        "tags": ["Media"],
+        "description": "Edit Media",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "Media Id",
+            "type": "string",
+            "requried": true
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "Media Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "media"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "Media Name"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "description": "description media"
+          },
+          {
+            "name": "siteId",
+            "type": "string",
+            "in": "formData",
+            "description": "site Id"
+          },
+          {
+            "name": "categoryId",
+            "type": "string",
+            "in": "formData",
+            "description": "category Id"
+          },
+          {
+            "name": "categoryName",
+            "type": "string",
+            "in": "formData",
+            "description": "category name"
+          },
+          {
+            "name": "days",
+            "type": "string",
+            "in": "formData",
+            "description": "days formatted as json array but in string",
+            "default": "[]"
+          },
+          {
+            "name": "dates",
+            "type": "string",
+            "in": "formData",
+            "description": "dates formatted as json array but in string",
+            "default": "[]"
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "description": "duration in second",
+            "in": "formData"
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "description": "color for calendar event with hexadecimal",
+            "in": "formData"
+          },
+          {
+            "name": "type",
+            "type": "enum",
+            "description": "media type date|day|all",
+            "in": "formData"
+          },
+          {
+            "name": "start",
+            "type": "date",
+            "description": "Start date media yyyy-mm-dd",
+            "in": "formData"
+          },
+          {
+            "name": "end",
+            "type": "date",
+            "description": "End date media yyyy-mm-dd",
+            "in": "formData"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Media saved successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/media/delete": {
+      "delete": {
+        "tags": ["Media"],
+        "description": "delete media by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Media ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Media get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/feedback/list": {
+      "get": {
+        "tags": ["Feedback"],
+        "description": "List all feedback",
+        "parameters": [
+          {
+            "name": "siteId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Site ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Feedback fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/feedback/create": {
+      "post": {
+        "tags": ["Feedback"],
+        "description": "Create feedback",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["question", "siteId"],
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "string",
+                  "description": "yyyy-mm-dd"
+                },
+                "end": {
+                  "type": "string",
+                  "description": "yyyy-mm-dd"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Feedback created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/feedback/get": {
+      "get": {
+        "tags": ["Feedback"],
+        "description": "get feedback by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Feedback ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Feedback get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/feedback/edit": {
+      "post": {
+        "tags": ["Feedback"],
+        "description": "Create feedback",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["question", "siteId"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "feedback ID"
+                },
+                "question": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "string",
+                  "description": "yyyy-mm-dd"
+                },
+                "end": {
+                  "type": "string",
+                  "description": "yyyy-mm-dd"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Feedback created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/respondent/get": {
+      "get": {
+        "tags": ["Respondent"],
+        "description": "get feedback chart by feedback ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Feedback ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Respondent get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/respondent/create": {
+      "post": {
+        "tags": ["Respondent"],
+        "description": "Create respondent",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["feedbackID", "star"],
+              "properties": {
+                "star": {
+                  "type": "number"
+                },
+                "feedbackId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Respondent created successfully"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Login": {
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

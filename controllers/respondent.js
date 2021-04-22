@@ -22,7 +22,7 @@ exports.create = async (req, res, next) => {
         res.status(500).send({ message: err, data: respondent });
         return;
       }
-      res.send({
+      res.status(201).send({
         error: 0,
         message: "Respondent was added successfully!",
         data: respondent,
