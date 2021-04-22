@@ -9,8 +9,8 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "http://13.229.130.192",
-  "basePath": "/api/",
+  "host": "localhost:5000",
+  "basePath": "/",
   "tags": [
     {
       "name": "Auth",
@@ -27,6 +27,34 @@
     {
       "name": "Respondent",
       "description": "Respondent API"
+    },
+    {
+      "name": "User",
+      "description": "User API"
+    },
+    {
+      "name": "Site",
+      "description": "Site API"
+    },
+    {
+      "name": "Organization",
+      "description": "Organization API"
+    },
+    {
+      "name": "Media Category",
+      "description": "Media Category API"
+    },
+    {
+      "name": "POI",
+      "description": "POI API"
+    },
+    {
+      "name": "POI Category",
+      "description": "POI Category API"
+    },
+    {
+      "name": "Map",
+      "description": "Map API"
     }
   ],
   "schemes": ["http"],
@@ -44,32 +72,63 @@
             "in": "body",
             "description": "Login",
             "schema": {
-              "$ref": "#/definitions/Login"
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "Login success",
-            "schema": {
-              "$ref": "#/definitions/Login"
-            }
+            "description": "Login success"
           },
           "422": {
-            "description": "Validation error",
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/auth/change": {
+      "put": {
+        "tags": ["Auth"],
+        "description": "Change password",
+        "parameters": [
+          {
+            "name": "change password",
+            "in": "body",
+            "description": "Login",
             "schema": {
-              "$ref": "#/definitions/Error"
-            },
-            "example": {
-              "errors": {
-                "password": [
-                  {
-                    "msg": "Invalid password"
-                  }
-                ]
+              "required": ["oldPassword", "newPassword"],
+              "properties": {
+                "oldPassword": {
+                  "type": "string"
+                },
+                "newPassword": {
+                  "type": "string"
+                }
               }
             }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "Change password success"
+          },
+          "422": {
+            "description": "Validation error"
           }
         }
       }
@@ -516,6 +575,33 @@
         }
       }
     },
+    "/feedback/delete": {
+      "delete": {
+        "tags": ["Feedback"],
+        "description": "delete feedback by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Feedback ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Feedback deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
     "/respondent/get": {
       "get": {
         "tags": ["Respondent"],
@@ -571,28 +657,437 @@
           }
         }
       }
-    }
-  },
-  "definitions": {
-    "Login": {
-      "required": ["email", "password"],
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "description": "List all users",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "User fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
         }
       }
     },
-    "Error": {
-      "type": "object",
-      "properties": {
-        "errors": {
-          "type": "object"
-        },
-        "message": {
-          "type": "string"
+    "/user/create": {
+      "post": {
+        "tags": ["User"],
+        "description": "Create User",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "User Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "user",
+            "requried": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "User Name",
+            "requried": true
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "in": "formData",
+            "description": "User Email",
+            "requried": true
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "in": "formData",
+            "description": "User Password",
+            "requried": true
+          },
+          {
+            "name": "organizationId",
+            "type": "string",
+            "in": "formData",
+            "description": "user organization ID",
+            "requried": true
+          },
+          {
+            "name": "organizationName",
+            "type": "string",
+            "in": "formData",
+            "description": "user organization Name",
+            "requried": true
+          },
+          {
+            "name": "isAdmin",
+            "type": "boolean",
+            "in": "formData",
+            "description": "wheter the user is admin or not",
+            "default": false,
+            "requried": true
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "User saved successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/user/get": {
+      "post": {
+        "tags": ["User"],
+        "description": "get user by Id",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "user body",
+            "in": "body",
+            "schema": {
+              "required": ["id"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/user/edit": {
+      "post": {
+        "tags": ["User"],
+        "description": "Edit User",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "User Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "user",
+            "requried": true
+          },
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "User ID",
+            "type": "string",
+            "requried": true
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "User Name",
+            "requried": true
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "in": "formData",
+            "description": "User Email",
+            "requried": true
+          },
+          {
+            "name": "password",
+            "type": "string",
+            "in": "formData",
+            "description": "User Password"
+          },
+          {
+            "name": "organizationId",
+            "type": "string",
+            "in": "formData",
+            "description": "user organization ID",
+            "requried": true
+          },
+          {
+            "name": "organizationName",
+            "type": "string",
+            "in": "formData",
+            "description": "user organization Name",
+            "requried": true
+          },
+          {
+            "name": "isAdmin",
+            "type": "boolean",
+            "in": "formData",
+            "description": "wheter the user is admin or not",
+            "default": false,
+            "requried": true
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "User saved successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/user/access": {
+      "post": {
+        "tags": ["User"],
+        "description": "update user access",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "user body",
+            "in": "body",
+            "schema": {
+              "required": ["access"],
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "access": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "admin": true,
+                      "analytics": true,
+                      "media": true,
+                      "poi": true,
+                      "siteId": "603322a59591f7e39d7389f0"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User access modified successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/user/delete": {
+      "delete": {
+        "tags": ["User"],
+        "description": "delete user",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "id": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/site/list": {
+      "get": {
+        "tags": ["Site"],
+        "description": "List all site",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Site fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/site/create": {
+      "post": {
+        "tags": ["Site"],
+        "description": "Create site",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["name", "organizationId", "organizationName"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "organizationId": {
+                  "type": "string"
+                },
+                "organizationName": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Site created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/site/get": {
+      "post": {
+        "tags": ["Site"],
+        "description": "get site by ID",
+        "parameters": [
+          {
+            "name": "Site Body",
+            "in": "body",
+            "schema": {
+              "required": ["id"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Site get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/site/{id}": {
+      "post": {
+        "tags": ["Site"],
+        "description": "Create site",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["name", "organizationId", "organizationName"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "organizationId": {
+                  "type": "string"
+                },
+                "organizationName": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Site created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/site/delete": {
+      "delete": {
+        "tags": ["Site"],
+        "description": "delete site by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Site ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Site deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
         }
       }
     }

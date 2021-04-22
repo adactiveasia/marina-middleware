@@ -30,7 +30,7 @@ exports.addSite = async (req, res, next) => {
       .then(() => {
         res.status(201).json({
           error: 0,
-          message: "User was added successfully!",
+          message: "Site was added successfully!",
         });
       })
       .catch((err) => {
@@ -55,7 +55,7 @@ exports.editSite = async (req, res, next) => {
       .then(() => {
         res.status(201).json({
           error: 0,
-          message: "User was added successfully!",
+          message: "Site was added successfully!",
         });
       })
       .catch((err) => {
