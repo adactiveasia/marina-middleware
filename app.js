@@ -91,7 +91,7 @@ app.use("/media", mediaRouter);
 app.use("/map", mapRouter);
 app.use("/feedback", feedbackRouter);
 app.use("/respondent", respondentRouter);
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((error, req, res, next) => {
   console.log(error);
