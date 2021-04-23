@@ -1020,7 +1020,7 @@
     "/site/{id}": {
       "post": {
         "tags": ["Site"],
-        "description": "Create site",
+        "description": "Update site",
         "parameters": [
           {
             "name": "id",
@@ -1056,7 +1056,7 @@
         "security": [{ "Bearer": [] }],
         "responses": {
           "201": {
-            "description": "Site created successfully"
+            "description": "Site updated successfully"
           },
           "401": {
             "description": "Unauthorize"
@@ -1084,6 +1084,301 @@
         "responses": {
           "200": {
             "description": "Site deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/organization": {
+      "get": {
+        "tags": ["Organization"],
+        "description": "List all organization",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Organization fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/organization/create": {
+      "post": {
+        "tags": ["Organization"],
+        "description": "Create organization",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Organization created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/organization/get": {
+      "post": {
+        "tags": ["Organization"],
+        "description": "get organization by ID",
+        "parameters": [
+          {
+            "name": "Organization Body",
+            "in": "body",
+            "schema": {
+              "required": ["id"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Organization get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/organization/{id}": {
+      "post": {
+        "tags": ["Organization"],
+        "description": "Update organization",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["name", "organizationId", "organizationName"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Organization updated successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/organization/delete": {
+      "delete": {
+        "tags": ["Organization"],
+        "description": "delete organization by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Organization ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Organization deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/category": {
+      "get": {
+        "tags": ["Media Category"],
+        "description": "List all category",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Media Category fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/category/create": {
+      "post": {
+        "tags": ["Media Category"],
+        "description": "Create category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Media Category created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/category/get": {
+      "post": {
+        "tags": ["Media Category"],
+        "description": "get category by ID",
+        "parameters": [
+          {
+            "name": "Media Category Body",
+            "in": "body",
+            "schema": {
+              "required": ["id"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Media Category get successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/category/edit": {
+      "post": {
+        "tags": ["Media Category"],
+        "description": "Update category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["id", "name", "categoryId", "categoryName"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Media Category updated successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/category/delete": {
+      "delete": {
+        "tags": ["Media Category"],
+        "description": "delete category by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Media Category ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Media Category deleted successfully"
           },
           "401": {
             "description": "Unauthorize"
