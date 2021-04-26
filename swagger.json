@@ -932,7 +932,7 @@
         }
       }
     },
-    "/site/list": {
+    "/site": {
       "get": {
         "tags": ["Site"],
         "description": "List all site",
