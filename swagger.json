@@ -1385,6 +1385,587 @@
           }
         }
       }
+    },
+    "/poi/list": {
+      "get": {
+        "tags": ["POI"],
+        "description": "List all poi",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "POI fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poi/create": {
+      "post": {
+        "tags": ["POI"],
+        "description": "Create poi",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "POI Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "poi"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "POI Name"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "description": "POI description"
+          },
+          {
+            "name": "siteId",
+            "type": "string",
+            "in": "formData",
+            "description": "site Id"
+          },
+          {
+            "name": "categoryId",
+            "type": "string",
+            "in": "formData",
+            "description": "category Id"
+          },
+          {
+            "name": "categoryName",
+            "type": "string",
+            "in": "formData",
+            "description": "category name"
+          },
+          {
+            "name": "floor",
+            "type": "string",
+            "in": "formData",
+            "description": "poi floor"
+          },
+          {
+            "name": "location",
+            "type": "string",
+            "in": "formData",
+            "description": "poi location"
+          },
+          {
+            "name": "opentime",
+            "type": "string",
+            "in": "formData",
+            "description": "poi opentime"
+          },
+          {
+            "name": "phone",
+            "type": "string",
+            "in": "formData",
+            "description": "poi phone"
+          },
+          {
+            "name": "priority",
+            "type": "string",
+            "in": "formData",
+            "description": "poi priority"
+          },
+          {
+            "name": "tag",
+            "type": "string",
+            "in": "formData",
+            "description": "poi tag"
+          },
+          {
+            "name": "url",
+            "type": "string",
+            "in": "formData",
+            "description": "poi url"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "POI created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poi/edit": {
+      "put": {
+        "tags": ["POI"],
+        "description": "Update poi",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "POI ID",
+            "type": "string",
+            "requried": true
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "POI Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "poi"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "POI Name"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "description": "POI description"
+          },
+          {
+            "name": "siteId",
+            "type": "string",
+            "in": "formData",
+            "description": "site Id"
+          },
+          {
+            "name": "categoryId",
+            "type": "string",
+            "in": "formData",
+            "description": "category Id"
+          },
+          {
+            "name": "categoryName",
+            "type": "string",
+            "in": "formData",
+            "description": "category name"
+          },
+          {
+            "name": "floor",
+            "type": "string",
+            "in": "formData",
+            "description": "poi floor"
+          },
+          {
+            "name": "location",
+            "type": "string",
+            "in": "formData",
+            "description": "poi location"
+          },
+          {
+            "name": "opentime",
+            "type": "string",
+            "in": "formData",
+            "description": "poi opentime"
+          },
+          {
+            "name": "phone",
+            "type": "string",
+            "in": "formData",
+            "description": "poi phone"
+          },
+          {
+            "name": "priority",
+            "type": "string",
+            "in": "formData",
+            "description": "poi priority"
+          },
+          {
+            "name": "tag",
+            "type": "string",
+            "in": "formData",
+            "description": "poi tag"
+          },
+          {
+            "name": "url",
+            "type": "string",
+            "in": "formData",
+            "description": "poi url"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "POI updated successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poi/delete": {
+      "delete": {
+        "tags": ["POI"],
+        "description": "delete poi by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "POI ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "POI deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poiCategory/list": {
+      "get": {
+        "tags": ["POI Category"],
+        "description": "List all poiCategory",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "POI Category fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poiCategory/create": {
+      "post": {
+        "tags": ["POI Category"],
+        "description": "Create poiCategory",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "POI Category created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poiCategory/edit": {
+      "post": {
+        "tags": ["POI Category"],
+        "description": "Update poiCategory",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["id", "name", "siteId"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "siteId": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "POI Category updated successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/poiCategory/delete": {
+      "delete": {
+        "tags": ["POI Category"],
+        "description": "delete POI Category by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "POI Category ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "POI Category deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/map": {
+      "get": {
+        "tags": ["Map"],
+        "description": "List all Map",
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Map fetched successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/map/create": {
+      "post": {
+        "tags": ["Map"],
+        "description": "Create Map",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "Map Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "map"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "Map Name"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "description": "Map description"
+          },
+          {
+            "name": "siteId",
+            "type": "string",
+            "in": "formData",
+            "description": "site Id"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Map created successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/map/get": {
+      "get": {
+        "tags": ["Map"],
+        "description": "get map by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Map ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Map deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/map/edit": {
+      "post": {
+        "tags": ["Map"],
+        "description": "Update map",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "Map ID",
+            "type": "string",
+            "requried": true
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "Map Image",
+            "type": "file",
+            "requried": true
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "description": "Path where images store",
+            "type": "string",
+            "default": "map"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "in": "formData",
+            "description": "Map Name"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "in": "formData",
+            "description": "Map description"
+          },
+          {
+            "name": "siteId",
+            "type": "string",
+            "in": "formData",
+            "description": "site Id"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "required": ["path", "userPos"],
+              "properties": {
+                "paths": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "destLoc": "101,144",
+                      "pathId": "asdf",
+                      "pathLines": ["225,226", "129,156"],
+                      "pathName": "Path 01"
+                    }
+                  ]
+                },
+                "userPos": {
+                  "type": "string",
+                  "example": "215,214"
+                }
+              }
+            }
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Map updated successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
+    },
+    "/map/delete": {
+      "delete": {
+        "tags": ["Map"],
+        "description": "delete map by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Map ID"
+          }
+        ],
+        "producers": ["application/json"],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Map deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorize"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
