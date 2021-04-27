@@ -6,13 +6,14 @@ const Map = mongoose.model(
     {
       name: String,
       description: String,
+      mapPos: Object,
       siteId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Site",
       },
       fileUrl: String,
       paths: Array,
-      userPos: String,
+      userPos: Object,
       modifiedBy: String,
       createdBy: String,
     },
