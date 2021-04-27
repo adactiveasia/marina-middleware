@@ -81,12 +81,12 @@ exports.create = async (req, res, next) => {
       modifiedBy: user.email,
     });
 
-    feedback.status(201).save((err, org) => {
+    feedback.save((err, org) => {
       if (err) {
         res.status(500).send({ message: err, data: feedback });
         return;
       }
-      res.send({
+      res.status(201).send({
         error: 0,
         message: "Feedback was added successfully!",
         data: feedback,
