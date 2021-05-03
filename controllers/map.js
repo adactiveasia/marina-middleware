@@ -68,7 +68,7 @@ exports.editMap = async (req, res, next) => {
     map.siteId = request.siteId ? request.siteId : map.siteId;
     map.modifiedBy = authMap ? authMap.email : null;
     map.paths = request.paths ? request.paths : map.paths;
-    map.userPos = request.userPos ? request.userPos : map.userPos;
+    map.mapPos = request.mapPos ? request.mapPos : map.mapPos;
     if (req.file) {
       if (map.fileUrl) {
         if (fs.existsSync(`images/map/${map.fileUrl}`)) {
