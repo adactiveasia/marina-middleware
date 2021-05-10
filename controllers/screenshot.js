@@ -22,16 +22,20 @@ exports.getAll = async (req, res, next) => {
 };
 
 exports.delete = async (req, res, next) => {
-  Screenshot.findByIdAndRemove(req.query.id, (err, doc) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
-    res.send({
-      error: 0,
-      message: 'Screenshot was deleted successfully!',
-    });
-  });
+  console.log(req, '<<<< req');
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    Screenshot.findByIdAndDelete(req.query.id)
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: 'Screenshot was deleted successfully!',
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
 };
 
 exports.create = async (req, res, next) => {
