@@ -5,7 +5,7 @@ const User = require('../models/user');
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    Screenshot.find()
+    Screenshot.find({ siteId: req.query.siteId })
       .then((screenshot) => {
         res.status(200).json({
           error: 0,
@@ -40,10 +40,12 @@ exports.delete = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
+  console.log(req, '<<<<< request body ');
 
   if (req.user) {
     const screenshot = new Screenshot({
       name: req.body.name,
+      siteId: req.body.siteId,
       image: req.body.image,
       modifiedAt: new Date(),
     });
