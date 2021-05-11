@@ -5,8 +5,9 @@ const Screenshot = mongoose.model(
   new mongoose.Schema({
     name: String,
     siteId: String,
-    image: Buffer,
+    image: String,
     modifiedAt: Number,
+    createdAt: { type: Date, expires: 43200, default: Date.now },
   })
 );
 module.exports = Screenshot;
