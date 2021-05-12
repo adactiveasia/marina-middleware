@@ -20,5 +20,6 @@ router.delete(
 );
 
 router.get('/get', screenshotController.get);
+router.get('/getEveryHour', screenshotController.getEveryHour);
 
 module.exports = router;

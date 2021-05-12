@@ -7,7 +7,10 @@ const Screenshot = mongoose.model(
     siteId: String,
     image: String,
     modifiedAt: Number,
-    createdAt: { type: Date, expires: 43200, default: Date.now },
-  })
+    createdAt: {
+      type: Date,
+      default: new Date(),
+    },
+  }).index({ createdAt: 1 }, { expireAfterSeconds: 7776000 })
 );
 module.exports = Screenshot;

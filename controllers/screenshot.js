@@ -77,3 +77,31 @@ exports.get = async (req, res, next) => {
       return;
     });
 };
+
+exports.getEveryHour = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  Screenshot.aggregate([
+    {
+      $match: {
+        siteId: req.query.siteId,
+        createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+      },
+    },
+    { $sort: { createdAt: -1 } },
+    {
+      $group: {
+        _id: { $hour: '$createdAt' },
+        first: { $first: '$$ROOT' },
+      },
+    },
+  ])
+    .then((screenshot) => {
+      res.json({
+        data: screenshot,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err });
+      return;
+    });
+};

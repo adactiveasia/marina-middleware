@@ -1,13 +1,13 @@
-const ObjectId = require("mongodb").ObjectId;
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const utils = require("../utils/utils");
-const config = require("../config/auth.config");
-const db = require("../models");
+const ObjectId = require('mongodb').ObjectId;
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const utils = require('../utils/utils');
+const config = require('../config/auth.config');
+const db = require('../models');
 const User = db.user;
 const Feedback = db.feedback;
-const fs = require("fs");
-const mongoose = require("mongoose");
+const fs = require('fs');
+const mongoose = require('mongoose');
 
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
@@ -16,7 +16,7 @@ exports.getAll = async (req, res, next) => {
       .then((feedback) => {
         res.status(200).json({
           error: 0,
-          message: "Fetch data feedback success",
+          message: 'Fetch data feedback success',
           data: feedback,
         });
       })
@@ -46,7 +46,7 @@ exports.edit = async (req, res, next) => {
   feedback.save().then(() => {
     res.status(201).send({
       error: 0,
-      message: "Feedback was edited successfully!",
+      message: 'Feedback was edited successfully!',
       data: req.body,
     });
   });
@@ -60,7 +60,7 @@ exports.delete = async (req, res, next) => {
     }
     res.send({
       error: 0,
-      message: "Feedback was deleted successfully!",
+      message: 'Feedback was deleted successfully!',
     });
   });
 };
@@ -88,7 +88,7 @@ exports.create = async (req, res, next) => {
       }
       res.status(201).send({
         error: 0,
-        message: "Feedback was added successfully!",
+        message: 'Feedback was added successfully!',
         data: feedback,
       });
     });
