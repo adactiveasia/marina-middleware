@@ -9,7 +9,7 @@ const Screenshot = mongoose.model(
     modifiedAt: Number,
     createdAt: {
       type: Date,
-      default: new Date(),
+      default: Date.now,
     },
   }).index({ createdAt: 1 }, { expireAfterSeconds: 7776000 })
 );
