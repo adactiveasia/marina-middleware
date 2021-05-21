@@ -2,9 +2,10 @@
   "name": "adsign-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node ./src/app.js",
+    "build": "npx webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,7 +23,9 @@
   "homepage": "https://github.com/GoldenMaximo/nodejs-rest-api-basic#readme",
   "dependencies": {
     "@alirezazeynali/round-robin": "^1.0.1",
+    "@babel/core": "^7.12.13",
     "@elastic/elasticsearch": "^7.9.1",
+    "babel-loader": "^8.2.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -36,12 +39,18 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.15",
     "multer": "^1.4.2",
+    "node-polyfill-webpack-plugin": "^1.0.2",
     "nodemailer": "^6.4.12",
     "nodemon": "^2.0.7",
     "npm": "^7.5.2",
     "roundround": "^0.2.0",
-    "swagger-ui-express": "^4.1.6",
     "underscore": "^1.13.1",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.5.0",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "devDependencies": {
+    "path-browserify": "^1.0.1"
   }
 }

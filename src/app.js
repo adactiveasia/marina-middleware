@@ -28,7 +28,7 @@ const client = new Client({
 });
 
 // const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
-const MONGODB_URI = `mongodb://10.42.93.31:27017/adsign`;
+const MONGODB_URI = `mongodb://localhost:27017/adsign`;
 
 const app = express();
 
@@ -105,6 +105,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-    app.listen("5000", () => console.log("App ready"));
+    app.listen("5000", '127.0.0.1', () => console.log("App ready run on 127.0.0.1:5000"));
   })
   .catch((err) => console.log("ATLAS CONNECTION ERROR: ", err));
