@@ -88,12 +88,6 @@ exports.getEveryHour = async (req, res, next) => {
       },
     },
     { $sort: { createdAt: -1 } },
-    {
-      $group: {
-        _id: { $hour: '$createdAt' },
-        first: { $first: '$$ROOT' },
-      },
-    },
   ])
     .then((screenshot) => {
       res.json({
