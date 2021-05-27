@@ -46,6 +46,8 @@ exports.create = async (req, res, next) => {
     const screenshot = new Screenshot({
       name: req.body.name,
       siteId: req.body.siteId,
+      mapId: req.body.mapId,
+      mapName: req.body.mapName,
       image: req.body.image,
       modifiedAt: new Date(),
     });
