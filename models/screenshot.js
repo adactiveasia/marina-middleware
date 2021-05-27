@@ -6,6 +6,8 @@ const Screenshot = mongoose.model(
     name: String,
     siteId: String,
     image: String,
+    mapId: String,
+    mapName: String,
     modifiedAt: Number,
     createdAt: {
       type: Date,
