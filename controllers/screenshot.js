@@ -5,7 +5,21 @@ const User = require('../models/user');
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    Screenshot.find({ siteId: req.query.siteId })
+    Screenshot.aggregate([
+      {
+        $match: {
+          siteId: req.query.siteId,
+          createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: '$mapId',
+          latest: { $first: '$$ROOT' },
+        },
+      },
+    ])
       .then((screenshot) => {
         res.status(200).json({
           error: 0,
@@ -86,6 +100,7 @@ exports.getEveryHour = async (req, res, next) => {
     {
       $match: {
         siteId: req.query.siteId,
+        mapId: req.query.mapId,
         createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
       },
     },
