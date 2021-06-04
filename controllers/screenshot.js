@@ -122,3 +122,30 @@ exports.getEveryHour = async (req, res, next) => {
       return;
     });
 };
+
+exports.getStatus = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  Screenshot.find({
+    createdAt: {
+      // 1 minutes ago (from now)
+      $gt: new Date(Date.now() - 1000 * 60 * 1),
+    },
+    mapId: req.query.mapId,
+  })
+    .then((data) => {
+      if (data.length) {
+        res.status(200).send({
+          error: 0,
+          message: 'Active',
+        });
+      } else {
+        res.status(200).send({
+          error: 0,
+          message: 'Inactive',
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err });
+    });
+};

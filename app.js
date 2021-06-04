@@ -31,7 +31,7 @@ const client = new Client({
 });
 
 // const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
-const MONGODB_URI = `mongodb://172.31.44.93:27017/adsign`;
+const MONGODB_URI = `mongodb://localhost:27017/adsign`;
 
 const app = express();
 
