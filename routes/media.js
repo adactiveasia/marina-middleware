@@ -1,25 +1,32 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
-const sitesController = require("../controllers/site");
+const mediaController = require("../controllers/media");
 const validate = require("../utils/validator");
 
-router.get("/", sitesController.listAllSites);
-router.post("/get", sitesController.getSite);
+router.get("/list", [], mediaController.getAll);
+
 router.post(
   "/create",
   [body("name").notEmpty().withMessage("This field is required")],
   validate,
-  sitesController.addSite
+  mediaController.create
 );
 
 router.post(
-  "/:id",
+  "/edit",
   [body("name").notEmpty().withMessage("This field is required")],
   validate,
-  sitesController.editSite
+  mediaController.edit
 );
 
-router.delete("/delete", sitesController.deleteSite);
+router.delete(
+  "/delete",
+  [body("id").trim().isLength({ min: 5 })],
+  mediaController.delete
+);
+
+router.get("/get", mediaController.get);
+router.get("/calendar", mediaController.calendar);
 
 module.exports = router;

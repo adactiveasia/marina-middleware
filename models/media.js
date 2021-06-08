@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const Poi = mongoose.model(
-  "Poi",
+const Media = mongoose.model(
+  "Media",
   new mongoose.Schema({
     name: String,
     description: String,
@@ -11,21 +11,20 @@ const Poi = mongoose.model(
     },
     categoryId: {
       type: mongoose.Types.ObjectId,
-      ref: "PoiCategory",
+      ref: "Category",
     },
     categoryName: String,
-    floor: String,
-    location: String,
+    days: Array,
+    dates: Array,
+    duration: Number,
     logo: String,
-    logoUrl: String,
-    opentime: String,
-    phone: String,
-    priority: String,
-    tag: String,
-    url: String,
+    fileType: String,
+    color: String,
+    type: String,
+    start: Date,
+    end: Date,
     modifiedAt: Number,
     modifiedBy: String,
   })
 );
-
-module.exports = Poi;
+module.exports = Media;

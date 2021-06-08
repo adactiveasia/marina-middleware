@@ -1,34 +1,36 @@
 const utils = require("../utils/utils");
-const Organization = require("../models/organization");
+const Category = require("../models/category");
 const User = require("../models/user");
 
-exports.listAllOrganizations = async (req, res, next) => {
+exports.listAllCategories = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    const organizations = await Organization.find();
+    const categories = await Category.find();
     res.status(200).send({
-      data: organizations,
+      data: categories,
     });
   }
 };
 
-exports.addOrganization = async (req, res, next) => {
+exports.addCategory = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
   if (req.user) {
     const authUser = await User.findById(req.user.id);
+    console.log(req.body);
 
-    const organization = new Organization();
-    organization.name = req.body.name;
-    organization.description = req.body.description;
-    organization.modifiedBy = authUser ? authUser.email : null;
-    organization.createdBy = authUser ? authUser.email : null;
-    organization
+    const category = new Category();
+    category.name = req.body.name;
+    category.description = req.body.description;
+    category.siteId = req.body.siteId;
+    category.modifiedBy = authUser ? authUser.email : null;
+    category.createdBy = authUser ? authUser.email : null;
+    category
       .save()
       .then(() => {
         res.status(201).json({
           error: 0,
-          message: "User was added successfully!",
+          message: "Category was added successfully!",
         });
       })
       .catch((err) => {
@@ -37,21 +39,22 @@ exports.addOrganization = async (req, res, next) => {
   }
 };
 
-exports.editOrganization = async (req, res, next) => {
+exports.editCategory = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
     const authUser = await User.findById(req.user.id);
-    const organization = await Organization.findById(req.params.id);
-    organization.name = req.body.name;
-    organization.description = req.body.description;
-    organization.modifiedBy = authUser ? authUser.email : null;
-    organization.createdBy = authUser ? authUser.email : null;
-    organization
+    const category = await Category.findById(req.body.id);
+    category.name = req.body.name;
+    category.description = req.body.description;
+    category.siteId = req.body.siteId;
+    category.modifiedBy = authUser ? authUser.email : null;
+    category.createdBy = authUser ? authUser.email : null;
+    category
       .save()
       .then(() => {
         res.status(201).json({
           error: 0,
-          message: "User was added successfully!",
+          message: "Category was updated successfully!",
         });
       })
       .catch((err) => {
@@ -60,12 +63,12 @@ exports.editOrganization = async (req, res, next) => {
   }
 };
 
-exports.getOrganization = async (req, res, next) => {
+exports.getCategory = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
 
   if (req.user) {
-    Organization.findById(req.body.id)
-      .populate("Organization")
+    Category.findById(req.body.id)
+      .populate("Category")
       .then(async (user) => {
         res.status(200).json({
           data: user,
@@ -78,14 +81,14 @@ exports.getOrganization = async (req, res, next) => {
   }
 };
 
-exports.deleteOrganization = async (req, res, next) => {
+exports.deleteCategory = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    Organization.findByIdAndDelete(req.query.id)
+    Category.findByIdAndDelete(req.query.id)
       .then(() => {
         res.status(201).json({
           error: 0,
-          message: "Organization was deleted successfully!",
+          message: "Category was deleted successfully!",
         });
       })
       .catch((err) => {

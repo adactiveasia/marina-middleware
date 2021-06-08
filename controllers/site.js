@@ -1,61 +1,99 @@
-const config = require('../config/auth.config');
-const db = require('../models');
-const User = db.user;
-const ROld = db.role;
+const utils = require("../utils/utils");
+const Site = require("../models/site");
+const User = require("../models/user");
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const utils = require('../utils/utils');
-
-exports.create = (req, res, next) => {
-    utils.authenticateJWT(req, res, next);
+exports.listAllSites = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    const sites = await Site.find();
     res.status(200).send({
-        user: req.user
-    })
-
+      data: sites,
+    });
+  }
 };
 
-exports.signin = (req, res) => {
-    User.findOne({
-        email: req.body.email
-    })
-        .exec((err, user) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return
-            }
+exports.addSite = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
 
-            if (!user) {
-                return res.status(404).send({ message: "User Not found." });
-            }
+  if (req.user) {
+    const authUser = await User.findById(req.user.id);
 
-            const passwordIsValid = bcrypt.compareSync(
-                req.body.password,
-                user.password
-            );
-
-            if (!passwordIsValid) {
-                return res.status(401).send({
-                    error: 1,
-                    message: "Invalid Password!"
-                });
-            }
-
-            const token = jwt.sign({ id: user.id }, config.secret, {
-                expiresIn: 86400 // 24 hours
-            });
-
-            var authorities = [];
-
-            // for (let i = 0; i < user.roles.length; i++) {
-            //     authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-            // }
-            res.status(200).send({
-                error:0,
-                id: user._id,
-                email: user.email,
-                name: user.name,
-                accessToken: token
-            });
+    const site = new Site();
+    site.name = req.body.name;
+    site.description = req.body.description;
+    site.organizationId = req.body.organizationId;
+    site.organizationName = req.body.organizationName;
+    site.modifiedBy = authUser ? authUser.email : null;
+    site.createdBy = authUser ? authUser.email : null;
+    site
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "Site was added successfully!",
         });
-}
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.editSite = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    const authUser = await User.findById(req.user.id);
+    const site = await Site.findById(req.params.id);
+    site.name = req.body.name;
+    site.description = req.body.description;
+    site.organizationId = req.body.organizationId;
+    site.organizationName = req.body.organizationName;
+    site.modifiedBy = authUser ? authUser.email : null;
+    site.createdBy = authUser ? authUser.email : null;
+    site
+      .save()
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "Site was added successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.getSite = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+
+  if (req.user) {
+    Site.findById(req.body.id)
+      .populate("Organization")
+      .then(async (user) => {
+        res.status(200).json({
+          data: user,
+          error: 0,
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};
+
+exports.deleteSite = async (req, res, next) => {
+  utils.authenticateJWT(req, res, next);
+  if (req.user) {
+    Site.findByIdAndDelete(req.query.id)
+      .then(() => {
+        res.status(201).json({
+          error: 0,
+          message: "Site was deleted successfully!",
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+  }
+};

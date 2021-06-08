@@ -4,7 +4,7 @@ const PoiCategory = mongoose.model(
   "PoiCategory",
   new mongoose.Schema({
     name: String,
-    desc: String,
+    description: String,
     modifiedAt: Number,
     modifiedBy: String,
     siteId: String,

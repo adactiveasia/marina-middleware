@@ -47,7 +47,7 @@ router.post(
 );
 
 router.post(
-  "/:id",
+  "/edit",
   [
     body("email")
       .notEmpty()
@@ -57,7 +57,7 @@ router.post(
       .custom((value, { req }) => {
         return User.findOne({
           email: value,
-          _id: { $ne: mongoose.Types.ObjectId(req.params.id) },
+          _id: { $ne: mongoose.Types.ObjectId(req.body.id) },
         }).then((user) => {
           if (user) {
             return Promise.reject(
@@ -72,5 +72,6 @@ router.post(
 );
 
 router.delete("/delete", userController.deleteUser);
+router.post("/access", userController.access);
 
 module.exports = router;
