@@ -7,7 +7,10 @@ const PoiCategory = mongoose.model(
     description: String,
     modifiedAt: Number,
     modifiedBy: String,
-    siteId: String,
+    siteId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Site",
+    },
   })
 );
 

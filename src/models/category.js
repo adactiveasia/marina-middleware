@@ -7,7 +7,7 @@ const Category = mongoose.model(
       name: String,
       description: String,
       siteId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Site",
       },
       modifiedAt: Number,

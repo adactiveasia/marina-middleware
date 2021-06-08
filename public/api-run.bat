@@ -1,0 +1,6 @@
+@ECHO OFF
+@ECHO CHANGE FOLDER
+cd D:\api\
+@ECHO RUN NODE API
+node main
+PAUSE

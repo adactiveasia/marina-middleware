@@ -6,7 +6,7 @@ const Feedback = mongoose.model(
     {
       question: String,
       siteId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Site",
       },
       start: Date,

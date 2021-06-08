@@ -4,7 +4,10 @@ const Screenshot = mongoose.model(
   'Screenshot',
   new mongoose.Schema({
     name: String,
-    siteId: String,
+    siteId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Site",
+    },
     image: String,
     mapId: String,
     mapName: String,

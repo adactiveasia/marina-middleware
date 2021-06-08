@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -23,18 +23,23 @@
   "homepage": "https://github.com/GoldenMaximo/nodejs-rest-api-basic#readme",
   "dependencies": {
     "@alirezazeynali/round-robin": "^1.0.1",
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
     "@elastic/elasticsearch": "^7.9.1",
+    "babel-loader": "^8.2.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
+    "esprima": "^4.0.1",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-validator": "^6.6.1",
-    "firebase-admin": "^9.2.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
+    "mongodb-client-encryption": "^1.2.4",
     "mongoose": "^5.11.15",
     "multer": "^1.4.2",
     "node-polyfill-webpack-plugin": "^1.1.2",
@@ -43,6 +48,7 @@
     "npm": "^7.5.2",
     "roundround": "^0.2.0",
     "swagger-ui-express": "^4.1.6",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "underscore": "^1.13.1",
     "uuid": "^8.3.0",
     "webpack": "^5.21.2",

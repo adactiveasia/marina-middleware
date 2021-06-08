@@ -1,6 +1,5 @@
 const fs = require("fs");
 const path = require("path");
-const admin = require("firebase-admin");
 const User = require("../models/user");
 const Site = require("../models/site");
 const Organization = require("../models/organization");
