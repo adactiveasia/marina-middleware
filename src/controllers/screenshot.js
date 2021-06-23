@@ -137,11 +137,13 @@ exports.getStatus = async (req, res, next) => {
         res.status(200).send({
           error: 0,
           message: 'Active',
+          mapId: req.query.mapId,
         });
       } else {
         res.status(200).send({
           error: 0,
           message: 'Inactive',
+          mapId: req.query.mapId,
         });
       }
     })

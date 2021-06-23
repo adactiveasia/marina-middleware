@@ -31,8 +31,14 @@ const client = new Client({
 });
 
 // const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
+<<<<<<< HEAD:src/app.js
 const MONGODB_URI = `mongodb://10.42.93.31:27017/adsign`;
 // const MONGODB_URI = `mongodb://10.44.227.147:27017/adsign`;
+=======
+// const MONGODB_URI = `mongodb://172.31.44.93:27017/adsign`;
+const MONGODB_URI = `mongodb://127.0.0.1:27017/adsign`;
+
+>>>>>>> origin/feature/validation:app.js
 
 const app = express();
 
