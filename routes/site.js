@@ -8,14 +8,20 @@ router.get("/", sitesController.listAllSites);
 router.post("/get", sitesController.getSite);
 router.post(
   "/create",
-  [body("name").notEmpty().withMessage("This field is required")],
+  [
+    body("name").notEmpty().withMessage("This field is required"),
+    body("organizationId").notEmpty().withMessage("This field is required"),
+  ],
   validate,
   sitesController.addSite
 );
 
 router.post(
   "/:id",
-  [body("name").notEmpty().withMessage("This field is required")],
+  [
+    body("name").notEmpty().withMessage("This field is required"),
+    body("organizationId").notEmpty().withMessage("This field is required"),
+  ],
   validate,
   sitesController.editSite
 );

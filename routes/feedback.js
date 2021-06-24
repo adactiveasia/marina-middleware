@@ -8,14 +8,22 @@ router.get("/list", [], feedbackController.getAll);
 
 router.post(
   "/create",
-  [body("question").notEmpty().withMessage("This field is required")],
+  [
+    body("question").notEmpty().withMessage("This field is required"),
+    body("start").notEmpty().withMessage("This field is required"),
+    body("end").notEmpty().withMessage("This field is required"),
+  ],
   validate,
   feedbackController.create
 );
 
 router.post(
   "/edit",
-  [body("question").notEmpty().withMessage("This field is required")],
+  [
+    body("question").notEmpty().withMessage("This field is required"),
+    body("start").notEmpty().withMessage("This field is required"),
+    body("end").notEmpty().withMessage("This field is required"),
+  ],
   validate,
   feedbackController.edit
 );
