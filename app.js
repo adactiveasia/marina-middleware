@@ -23,7 +23,8 @@ const respondentRouter = require("./src/routes/respondent");
 const dbConfig = require("./src/config/db.config");
 
 // const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
-const MONGODB_URI = `mongodb://10.42.93.31:27017/adsign`;
+// const MONGODB_URI = `mongodb://10.42.93.31:27017/adsign`;
+const MONGODB_URI = `mongodb://175.41.186.33:27017/adsign`;
 
 const app = express();
 
