@@ -6,6 +6,7 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Poi = db.poi;
+const Map = db.map;
 const fs = require("fs");
 
 exports.getAll = async (req, res, next) => {
@@ -60,6 +61,26 @@ exports.edit = async (req, res, next) => {
   poi.modifiedAt = new Date();
   poi.modifiedBy = user.email;
 
+  const query = { siteId: req.body.siteId };
+  const maps = await Map.find(query);
+  const editedMaps = maps.map(map => {
+
+    const paths = map.paths.map(path => {
+      if (`${path.id}` === req.body.id) {
+        path.name = req.body.name;
+      }
+      return path
+    })
+    map.paths = paths;
+
+    map
+      .save()
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+    return map;
+  })
+
   poi.save().then(() => {
     res.send({
       error: 0,
@@ -69,7 +90,21 @@ exports.edit = async (req, res, next) => {
 };
 
 exports.delete = async (req, res, next) => {
-  const poi = await Poi.findById(req.query.id);
+  const poi = await Poi.findById(req.body.poiId);
+  const query = { siteId: req.body.siteId };
+  const maps = await Map.find(query);
+  const editedMaps = maps.map(map => {
+    const paths = map.paths.filter(path => {
+      return `${path.id}` !== req.body.poiId
+    })
+    map.paths = paths;
+    map
+      .save()
+      .catch((err) => {
+        res.status(500).send({ message: err });
+      });
+    return map;
+  })
 
   if (poi) {
     if (poi.logo) {
@@ -79,7 +114,7 @@ exports.delete = async (req, res, next) => {
     }
   }
 
-  Poi.findByIdAndRemove(req.query.id, (err, doc) => {
+  Poi.findByIdAndRemove(req.body.poiId, (err, doc) => {
     if (err) {
       res.status(500).send({ message: err });
       return;

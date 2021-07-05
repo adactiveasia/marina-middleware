@@ -8,6 +8,7 @@ db.mongoose = mongoose;
 db.user = require("./user");
 db.organization = require("./organization");
 db.poi = require("./poi");
+db.map = require("./map");
 db.poiCategory = require("./poiCategory");
 db.category = require("./category");
 db.media = require("./media");
