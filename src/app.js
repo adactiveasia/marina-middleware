@@ -8,23 +8,23 @@ const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
 var fs = require("fs");
 
-const userRoutes = require("./src/routes/user");
-const authRoutes = require("./src/routes/auth");
-const siteRoutes = require("./src/routes/site");
-const organizationRoutes = require("./src/routes/organization");
-const poiRoutes = require("./src/routes/poi");
-const poiCategoryRoutes = require("./src/routes/poiCategory");
-const categoryRoutes = require("./src/routes/category");
-const mediaRouter = require("./src/routes/media");
-const mapRouter = require("./src/routes/map");
-const feedbackRouter = require("./src/routes/feedback");
-const respondentRouter = require("./src/routes/respondent");
+const userRoutes = require("./routes/user");
+const authRoutes = require("./routes/auth");
+const siteRoutes = require("./routes/site");
+const organizationRoutes = require("./routes/organization");
+const poiRoutes = require("./routes/poi");
+const poiCategoryRoutes = require("./routes/poiCategory");
+const categoryRoutes = require("./routes/category");
+const mediaRouter = require("./routes/media");
+const mapRouter = require("./routes/map");
+const feedbackRouter = require("./routes/feedback");
+const respondentRouter = require("./routes/respondent");
 
-const dbConfig = require("./src/config/db.config");
+const dbConfig = require("./config/db.config");
 
-// const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
+
+const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
 // const MONGODB_URI = `mongodb://10.42.93.31:27017/adsign`;
-const MONGODB_URI = `mongodb://175.41.186.33:27017/adsign`;
 
 const app = express();
 
@@ -101,6 +101,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then((result) => {
-    app.listen("5000", () => console.log("App ready"));
+    app.listen("5000", '127.0.0.1', () => console.log("App ready run on 127.0.0.1:5000"));
   })
   .catch((err) => console.log("ATLAS CONNECTION ERROR: ", err));
