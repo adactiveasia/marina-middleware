@@ -30,6 +30,7 @@ router.put('/edit',  [
 
 router.delete('/delete',  [
     body('id').trim().isLength({ min: 5 }),
+    body('siteId').trim().isLength({ min: 5 }),
 ], poiController.delete);
 
 module.exports = router;
