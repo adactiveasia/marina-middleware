@@ -57,7 +57,7 @@ router.post(
       .custom((value, { req }) => {
         return User.findOne({
           email: value,
-          _id: { $ne: mongoose.Types.ObjectId(req.body.id) },
+          _id: { $ne: mongoose.Schema.Types.ObjectId(req.body.id) },
         }).then((user) => {
           if (user) {
             return Promise.reject(

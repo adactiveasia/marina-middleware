@@ -6,11 +6,11 @@ const Poi = mongoose.model(
     name: String,
     description: String,
     siteId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Site",
     },
     categoryId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "PoiCategory",
     },
     categoryName: String,

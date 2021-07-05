@@ -10,6 +10,5 @@ module.exports = {
         filename: "main.js"
     },
     target: 'node',
-    externals: [nodeExternals()],
     mode: 'production'
 };

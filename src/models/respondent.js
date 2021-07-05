@@ -5,7 +5,7 @@ const Respondent = mongoose.model(
   new mongoose.Schema(
     {
       feedbackId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "feedback",
       },
       star: Number,
