@@ -41,6 +41,14 @@ router.post(
           }
         });
       }),
+    body("password")
+      .notEmpty()
+      .withMessage("This field is required"),
+    body('name').notEmpty()
+      .withMessage('This field is required'),
+    body('organizationId')
+      .notEmpty()
+      .withMessage('This field is required')
   ],
   validate,
   userController.addUser
