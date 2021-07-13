@@ -5,7 +5,7 @@ const userController = require("../controllers/user");
 const User = require("../models/user");
 const validate = require("../utils/validator");
 const utils = require("../utils/utils");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 router.post(
   "/win",
@@ -41,14 +41,9 @@ router.post(
           }
         });
       }),
-    body("password")
-      .notEmpty()
-      .withMessage("This field is required"),
-    body('name').notEmpty()
-      .withMessage('This field is required'),
-    body('organizationId')
-      .notEmpty()
-      .withMessage('This field is required')
+    body("password").notEmpty().withMessage("This field is required"),
+    body("name").notEmpty().withMessage("This field is required"),
+    body("organizationId").notEmpty().withMessage("This field is required"),
   ],
   validate,
   userController.addUser
@@ -61,19 +56,22 @@ router.post(
       .notEmpty()
       .withMessage("This field is required")
       .isEmail()
-      .withMessage("This field must be an email")
-      // .custom((value, { req }) => {
-      //   return User.findOne({
-      //     email: value,
-      //     _id: { $ne: mongoose.Schema.Types.ObjectId(req.body.id) },
-      //   }).then((user) => {
-      //     if (user) {
-      //       return Promise.reject(
-      //         "Email already taken! Please choose another one"
-      //       );
-      //     }
-      //   });
-      // }),
+      .withMessage("This field must be an email"),
+    body("name").notEmpty().withMessage("This field is required"),
+    body("organizationId").notEmpty().withMessage("This field is required"),
+
+    // .custom((value, { req }) => {
+    //   return User.findOne({
+    //     email: value,
+    //     _id: { $ne: mongoose.Schema.Types.ObjectId(req.body.id) },
+    //   }).then((user) => {
+    //     if (user) {
+    //       return Promise.reject(
+    //         "Email already taken! Please choose another one"
+    //       );
+    //     }
+    //   });
+    // }),
   ],
   validate,
   userController.editUser
