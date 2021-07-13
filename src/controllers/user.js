@@ -115,10 +115,10 @@ exports.editUser = async (req, res, next) => {
     const request = req.body;
     const user = await User.findByIdAndUpdate(request.id);
     user.username = request.username;
-    user.email = request.email;
-    if (request.password) {
-      user.password = bcrypt.hashSync(request.password);
-    }
+    // user.email = request.email;
+    // if (request.password) {
+    //   user.password = bcrypt.hashSync(request.password);
+    // }
     user.name = request.name;
     user.isAdmin = request.isAdmin;
     user.organizationId = request.organizationId;

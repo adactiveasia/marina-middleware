@@ -5,7 +5,7 @@ const userController = require("../controllers/user");
 const User = require("../models/user");
 const validate = require("../utils/validator");
 const utils = require("../utils/utils");
-const { mongoose } = require("../models");
+const mongoose = require('mongoose')
 
 router.post(
   "/win",
@@ -62,18 +62,18 @@ router.post(
       .withMessage("This field is required")
       .isEmail()
       .withMessage("This field must be an email")
-      .custom((value, { req }) => {
-        return User.findOne({
-          email: value,
-          _id: { $ne: mongoose.Schema.Types.ObjectId(req.body.id) },
-        }).then((user) => {
-          if (user) {
-            return Promise.reject(
-              "Email already taken! Please choose another one"
-            );
-          }
-        });
-      }),
+      // .custom((value, { req }) => {
+      //   return User.findOne({
+      //     email: value,
+      //     _id: { $ne: mongoose.Schema.Types.ObjectId(req.body.id) },
+      //   }).then((user) => {
+      //     if (user) {
+      //       return Promise.reject(
+      //         "Email already taken! Please choose another one"
+      //       );
+      //     }
+      //   });
+      // }),
   ],
   validate,
   userController.editUser
