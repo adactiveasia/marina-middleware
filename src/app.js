@@ -6,7 +6,6 @@ const path = require('path');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
-const { Client } = require('@elastic/elasticsearch');
 var fs = require('fs');
 
 const userRoutes = require('./routes/user');
@@ -26,14 +25,10 @@ const swaggerUi = require('swagger-ui-express'),
 
 const dbConfig = require('./config/db.config');
 
-const client = new Client({
-  node: 'http://localhost:9200',
-});
-
 // const MONGODB_URI = `mongodb+srv://${dbConfig.USER}:${dbConfig.PASS}@analytics-0.qcbmn.mongodb.net/${dbConfig.DB_NAME}?retryWrites=true&w=majority`
-// const MONGODB_URI = `mongodb://172.31.44.93:27017/adsign`;
-const MONGODB_URI = `mongodb://127.0.0.1:27017/adsign`;
-
+// const MONGODB_URI = `mongodb://10.42.93.31:27017/adsign`;
+const MONGODB_URI = `mongodb://172.31.44.93:27017/adsign`;
+// const MONGODB_URI = `mongodb://127.0.0.1:27017/adsign`;
 
 const app = express();
 

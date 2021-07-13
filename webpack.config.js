@@ -1,32 +1,14 @@
 const path = require('path');
-const {DefinePlugin} = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
-    entry: ['./src/app.js'],
+    entry: './src/app.js',
     output: {
-        path: path.join(__dirname, "/public"),
+        path: path.join(__dirname, "/public/dist"),
+        publicPath: "/public/dist",
         filename: "main.js"
     },
-    module: {
-        rules: [
-          {
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: ['@babel/preset-env'],
-                    plugins: ['@babel/plugin-transform-runtime']
-                }
-            }
-        }
-        ]
-      },
     target: 'node',
-    mode: 'production',
-    plugins: [
-        new UglifyJsPlugin(),
-        new DefinePlugin({"process.env.NODE_ENV": JSON.stringify("production")}),
-    ]
+    mode: 'production'
 };
