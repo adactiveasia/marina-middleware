@@ -9,7 +9,7 @@ router.get("/", mapController.listAllMaps);
 router.get("/get", mapController.getMap);
 router.post("/create", [
     body("name").notEmpty().withMessage('This field is required'),
-    body("file").notEmpty().withMessage('This field is required'),
+    // body("file").notEmpty().withMessage('This field is required'),
 ], validate, mapController.addMap);
 
 router.post("/edit", [
