@@ -2,33 +2,44 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const poiController = require('../controllers/poi');
+const validate = require("../utils/validator");
 
-router.get('/list',  [
+router.get('/list', [
 ], poiController.getAll);
 
-router.post('/create',  [
-    body('name').trim().isLength({ min: 5 }),
-    body('desc').trim(),
-    body('category').trim(),
-    body('floor').trim(),
-    body('location').trim(),
-    body('logo').trim(),
-    body('logoUrl').trim(),
-    body('opentime').trim(),
-    body('phone').trim(),
-    body('priority').trim(),
-    body('siteId').trim(),
-    body('tag').trim(),
-    body('url').trim(),
-], poiController.create);
+router.post('/create', [
+    body('name').isLength({ min: 5 }).notEmpty().withMessage('This field is required'),
+    body('desc'),
+    body('categoryId').notEmpty().withMessage('This field is required'),
+    body('floor').notEmpty().withMessage('This field is required'),
+    body('location').notEmpty().withMessage('This field is required'),
+    body('logo'),
+    body('logoUrl'),
+    body('opentime').notEmpty().withMessage('This field is required'),
+    body('phone').notEmpty().withMessage('This field is required'),
+    body('priority').notEmpty().withMessage('This field is required'),
+    body('siteId').notEmpty().withMessage('This field is required'),
+    body('tag'),
+    body('url').notEmpty().withMessage('This field is required')
+], validate, poiController.create);
 
-router.put('/edit',  [
-    body('id').trim().isLength({ min: 5 }),
-    body('name').trim().isLength({ min: 5 }),
-    body('desc').trim().isLength({ min: 8 }),
-], poiController.edit);
+router.put('/edit', [
+    body('name').isLength({ min: 5 }).notEmpty().withMessage('This field is required'),
+    body('desc'),
+    body('categoryId').notEmpty().withMessage('This field is required'),
+    body('floor').notEmpty().withMessage('This field is required'),
+    body('location').notEmpty().withMessage('This field is required'),
+    body('logo'),
+    body('logoUrl'),
+    body('opentime').notEmpty().withMessage('This field is required'),
+    body('phone').notEmpty().withMessage('This field is required'),
+    body('priority').notEmpty().withMessage('This field is required'),
+    body('siteId').notEmpty().withMessage('This field is required'),
+    body('tag'),
+    body('url').notEmpty().withMessage('This field is required'),
+], validate, poiController.edit);
 
-router.delete('/delete',  [
+router.delete('/delete', [
     body('id').trim().isLength({ min: 5 }),
 ], poiController.delete);
 

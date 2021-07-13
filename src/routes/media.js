@@ -8,14 +8,24 @@ router.get("/list", [], mediaController.getAll);
 
 router.post(
   "/create",
-  [body("name").notEmpty().withMessage("This field is required")],
+  [
+    body("name").notEmpty().withMessage("This field is required"),
+    body("categoryId").notEmpty().withMessage("This field is required"),
+    body("type").notEmpty().withMessage("This field is required"),
+    body("duration").notEmpty().withMessage("This field is required"),
+  ],
   validate,
   mediaController.create
 );
 
 router.post(
   "/edit",
-  [body("name").notEmpty().withMessage("This field is required")],
+  [
+    body("name").notEmpty().withMessage("This field is required"),
+    body("categoryId").notEmpty().withMessage("This field is required"),
+    body("type").notEmpty().withMessage("This field is required"),
+    body("duration").notEmpty().withMessage("This field is required"),
+  ],
   validate,
   mediaController.edit
 );
