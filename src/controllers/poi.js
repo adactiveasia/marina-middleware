@@ -1,4 +1,5 @@
 const ObjectId = require("mongodb").ObjectId;
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const utils = require("../utils/utils");
@@ -91,9 +92,8 @@ exports.edit = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
   const poi = await Poi.findById(req.body.poiId);
-  const query = { siteId: req.body.siteId };
-  const maps = await Map.find(query);
-  const editedMaps = maps.map(map => {
+  const maps = await Map.find({ siteId: req.body.siteId });
+  maps.map(map => {
     const paths = map.paths.filter(path => {
       return `${path.id}` !== req.body.poiId
     })

@@ -28,8 +28,8 @@ router.put('/edit',  [
     body('desc').trim().isLength({ min: 8 }),
 ], poiController.edit);
 
-router.delete('/delete',  [
-    body('id').trim().isLength({ min: 5 }),
+router.post('/delete',  [
+    body('poiId').trim().isLength({ min: 5 }),
     body('siteId').trim().isLength({ min: 5 }),
 ], poiController.delete);
 

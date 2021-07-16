@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 exports.getAll = async (req, res, next) => {
   utils.authenticateJWT(req, res, next);
   if (req.user) {
-    Media.find({ siteId: req.query.siteId })
+    Media.find({ siteId: req.body.siteId })
       .then((media) => {
         res.status(200).json({
           error: 0,
