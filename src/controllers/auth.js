@@ -50,9 +50,9 @@ exports.changePassword = async (req, res, next) => {
       user.password = bcrypt.hashSync(body.newPassword);
       user.isPasswordChanged = true;
     } else {
-      res.status(400).send({
+      res.status(422).send({
         error: 1,
-        message: "wrong password entered",
+        message: "Invalid credentials",
       });
     }
 
@@ -77,11 +77,7 @@ exports.signin = async (req, res) => {
   if (!user) {
     res.status(422).json({
       errors: {
-        email: [
-          {
-            msg: "User not found",
-          },
-        ],
+        msg: "Invalid credentials",
       },
     });
   } else {
@@ -89,11 +85,7 @@ exports.signin = async (req, res) => {
       if (!bcrypt.compareSync(req.body.password, user.password)) {
         res.status(422).json({
           errors: {
-            password: [
-              {
-                msg: "Invalid password",
-              },
-            ],
+            msg: "Invalid credentials",
           },
         });
       } else {
@@ -117,11 +109,9 @@ exports.signin = async (req, res) => {
     } else {
       res.status(422).json({
         errors: {
-          email: [
-            {
-              msg: "Your account is inactive",
-            },
-          ],
+          errors: {
+            msg: "Invalid credentials",
+          },
         },
       });
     }
