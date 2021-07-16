@@ -1,12 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const path = require('path');
-const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
-var fs = require('fs');
 
 
 const cmsRoutes = require('./routes/cms');

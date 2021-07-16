@@ -4,7 +4,7 @@ echo "Deploy to AWS..."
 
 npm run build
 
-cd build && git init
+# cd build && git init
 
 git config user.email "dev@adactive.asia"
 git config user.name "Dev Adactive"
