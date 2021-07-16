@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 
 app.use('/api/Cms', cmsRoutes);
 
+console.log('test')
 app.use((error, req, res, next) => {
   console.log(error);
   const statusCode = error.statusCode || 500;

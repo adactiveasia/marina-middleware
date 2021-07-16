@@ -4,10 +4,7 @@ echo "Deploy to AWS..."
 
 npm run build
 
-cd build && git init
-
-cp ../.env .env
-cp ../static.json static.json
+cp .env .env
 
 git config user.email "dev@adactive.asia"
 git config user.name "Dev Adactive"
