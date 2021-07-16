@@ -39,14 +39,9 @@ router.put('/edit', [
     body('url').notEmpty().withMessage('This field is required'),
 ], validate, poiController.edit);
 
-<<<<<<< HEAD
 router.post('/delete',  [
     body('poiId').trim().isLength({ min: 5 }),
     body('siteId').trim().isLength({ min: 5 }),
-=======
-router.delete('/delete', [
-    body('id').trim().isLength({ min: 5 }),
->>>>>>> 294c23a12f30e96d17dbe9adf3e16aafd23d1ea2
 ], poiController.delete);
 
 module.exports = router;
