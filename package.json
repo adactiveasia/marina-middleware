@@ -23,6 +23,7 @@
   "homepage": "https://github.com/GoldenMaximo/nodejs-rest-api-basic#readme",
   "dependencies": {
     "@babel/core": "^7.12.13",
+    "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
