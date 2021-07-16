@@ -7,8 +7,8 @@ module.exports = {
         entry: './src/app.js',
     },
     output: {
-        path: path.join(__dirname, "/public/dist"),
-        publicPath: "/public/dist",
+        path: path.join(__dirname, "/public"),
+        publicPath: "/public",
         filename: "main.js"
     },
     node: {
