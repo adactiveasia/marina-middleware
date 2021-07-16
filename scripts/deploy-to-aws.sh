@@ -11,4 +11,4 @@ git config user.name "Dev Adactive"
 git add . && git commit -m "Update"
 
 # Push to server
-git push -f dokku@18.141.29.133:marina master
+git push -f dokku@18.141.29.133:marina develop
